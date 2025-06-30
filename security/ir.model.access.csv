@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_oferta_oferta_user,oferta.oferta.user,model_oferta_oferta,sales_team.group_sale_salesman,1,1,1,0
+access_oferta_oferta_manager,oferta.oferta.manager,model_oferta_oferta,sales_team.group_sale_manager,1,1,1,1
+access_oferta_capitulo_user,oferta.capitulo.user,model_oferta_capitulo,sales_team.group_sale_salesman,1,1,1,0
+access_oferta_capitulo_manager,oferta.capitulo.manager,model_oferta_capitulo,sales_team.group_sale_manager,1,1,1,1
+access_oferta_clausula_user,oferta.clausula.user,model_oferta_clausula,sales_team.group_sale_salesman,1,0,0,0
+access_oferta_clausula_manager,oferta.clausula.manager,model_oferta_clausula,sales_team.group_sale_manager,1,1,1,1
+access_oferta_tarifa_user,oferta.tarifa.user,model_oferta_tarifa,sales_team.group_sale_salesman,1,1,1,0
+access_oferta_tarifa_manager,oferta.tarifa.manager,model_oferta_tarifa,sales_team.group_sale_manager,1,1,1,1
+access_oferta_delegacion_user,oferta.delegacion.user,model_oferta_delegacion,sales_team.group_sale_salesman,1,1,1,0
+access_oferta_delegacion_manager,oferta.delegacion.manager,model_oferta_delegacion,sales_team.group_sale_manager,1,1,1,1
+access_oferta_oferta_all,oferta.oferta.all,model_oferta_oferta,base.group_user,1,0,0,0
+access_oferta_clausula_all,oferta.clausula.all,model_oferta_clausula,base.group_user,1,0,0,0

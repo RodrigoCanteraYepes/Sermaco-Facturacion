@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Vista de Lista de Ofertas -->
+        <record id="view_oferta_tree" model="ir.ui.view">
+            <field name="name">oferta.oferta.tree</field>
+            <field name="model">oferta.oferta</field>
+            <field name="arch" type="xml">
+                <tree string="Ofertas" decoration-info="state=='borrador'" decoration-warning="state=='revision'" decoration-success="state=='aprobada'" decoration-danger="state=='rechazada'">
+                    <field name="numero_oferta"/>
+                    <field name="name"/>
+                    <field name="tipo_oferta"/>
+                    <field name="cliente_id"/>
+                    <field name="fecha_oferta"/>
+                    <field name="fecha_vencimiento"/>
+                    <field name="monto_total" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state" widget="badge" decoration-info="state=='borrador'" decoration-warning="state=='revision'" decoration-success="state=='aprobada'" decoration-danger="state=='rechazada'"/>
+                    <field name="user_id"/>
+                    <field name="integridad_ok" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Vista de Formulario de Ofertas -->
+        <record id="view_oferta_form" model="ir.ui.view">
+            <field name="name">oferta.oferta.form</field>
+            <field name="model">oferta.oferta</field>
+            <field name="arch" type="xml">
+                <form string="Oferta">
+                    <header>
+                        <button name="action_enviar_revision" type="object" string="Enviar a Revisión" class="btn-primary" attrs="{'invisible': [('state', '!=', 'borrador')]}"/>
+                        <button name="action_aprobar" type="object" string="Aprobar" class="btn-success" attrs="{'invisible': [('state', '!=', 'revision')]}"/>
+                        <button name="action_enviar_cliente" type="object" string="Enviar a Cliente" class="btn-primary" attrs="{'invisible': [('state', '!=', 'aprobada')]}"/>
+                        <button name="action_aceptar" type="object" string="Aceptar" class="btn-success" attrs="{'invisible': [('state', '!=', 'enviada')]}"/>
+                        <button name="action_rechazar" type="object" string="Rechazar" class="btn-danger" attrs="{'invisible': [('state', 'not in', ['revision', 'enviada'])]}"/>
+                        <button name="action_cancelar" type="object" string="Cancelar" attrs="{'invisible': [('state', 'in', ['aceptada', 'cancelada'])]}"/>
+                        <button name="action_reset_borrador" type="object" string="Volver a Borrador" attrs="{'invisible': [('state', 'not in', ['rechazada', 'cancelada'])]}"/>
+                        <button name="action_crear_pedido_venta" type="object" string="Crear Pedido de Venta" class="btn-primary" attrs="{'invisible': [('state', '!=', 'aceptada')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador,revision,aprobada,enviada,aceptada"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_sale_order" type="object" class="oe_stat_button" icon="fa-shopping-cart" attrs="{'invisible': [('pedido_venta_id', '=', False)]}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Pedido de Venta</span>
+                                </div>
+                            </button>
+                            <button name="action_view_opportunity" type="object" class="oe_stat_button" icon="fa-star" attrs="{'invisible': [('oportunidad_id', '=', False)]}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Oportunidad</span>
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="numero_oferta" readonly="1"/>
+                            </h1>
+                            <h2>
+                                <field name="name" placeholder="Nombre de la oferta..."/>
+                            </h2>
+                        </div>
+                        
+                        <!-- Alertas de Integridad -->
+                        <div class="alert alert-warning" role="alert" attrs="{'invisible': [('integridad_ok', '=', True)]}">
+                            <strong>¡Atención!</strong> La oferta tiene problemas de integridad:
+                            <ul>
+                                <li attrs="{'invisible': [('productos_sin_precio', '=', False)]}">Hay productos sin precio definido</li>
+                                <li attrs="{'invisible': [('capitulos_sin_productos', '=', False)]}">Hay capítulos sin productos</li>
+                                <li attrs="{'invisible': [('clausulas_count', '>', 0)]}">No hay cláusulas asignadas</li>
+                                <li attrs="{'invisible': [('delegacion_requerida', '=', False)]}">Se requiere delegación para este monto</li>
+                            </ul>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="tipo_oferta" widget="radio" options="{'horizontal': true}"/>
+                                <field name="cliente_id" options="{'no_create': True}"/>
+                                <field name="oportunidad_id" options="{'no_create': True}"/>
+                                <field name="user_id"/>
+                                <field name="tecnico_comercial_id"/>
+                            </group>
+                            <group>
+                                <field name="fecha_oferta"/>
+                                <field name="fecha_vencimiento"/>
+                                <field name="fecha_entrega_estimada"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                                <field name="monto_total" widget="monetary"/>
+                                <field name="margen_beneficio" widget="percentage"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Campos ocultos para validaciones -->
+                        <group invisible="1">
+                            <field name="integridad_ok"/>
+                            <field name="productos_sin_precio"/>
+                            <field name="capitulos_sin_productos"/>
+                            <field name="delegacion_requerida"/>
+                            <field name="tiene_capitulos"/>
+                            <field name="capitulos_count"/>
+                            <field name="clausulas_count"/>
+                            <field name="delegaciones_count"/>
+                            <field name="tarifas_count"/>
+                            <field name="pedido_venta_id"/>
+                        </group>
+                        
+                        <notebook>
+                            <!-- Pestaña de Capítulos -->
+                            <page string="Capítulos" name="capitulos" attrs="{'invisible': [('tipo_oferta', '=', 'venta_directa')]}">
+                                <field name="capitulo_ids" context="{'default_oferta_id': active_id}">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="descripcion"/>
+                                        <field name="productos_count"/>
+                                        <field name="clausulas_count"/>
+                                        <field name="subtotal" widget="monetary"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="active" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                                <div class="alert alert-info" role="alert" attrs="{'invisible': [('tipo_oferta', '!=', 'venta_directa')]}">
+                                    <strong>Información:</strong> En ofertas de venta directa no se utilizan capítulos.
+                                </div>
+                            </page>
+                            
+                            <!-- Pestaña de Tarifas -->
+                            <page string="Tarifas" name="tarifas">
+                                <field name="tarifa_ids" context="{'default_oferta_id': active_id}">
+                                    <tree editable="bottom">
+                                        <field name="producto_id"/>
+                                        <field name="cantidad"/>
+                                        <field name="precio_unitario" widget="monetary"/>
+                                        <field name="descuento_porcentaje" widget="percentage"/>
+                                        <field name="precio_con_descuento" widget="monetary"/>
+                                        <field name="total_con_descuento" widget="monetary"/>
+                                        <field name="fecha_inicio"/>
+                                        <field name="fecha_fin"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="active" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <!-- Pestaña de Cláusulas -->
+                            <page string="Cláusulas" name="clausulas">
+                                <field name="clausula_ids">
+                                    <tree>
+                                        <field name="codigo"/>
+                                        <field name="name"/>
+                                        <field name="tipo"/>
+                                        <field name="descripcion"/>
+                                        <field name="activa" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <!-- Pestaña de Delegaciones -->
+                            <page string="Delegaciones" name="delegaciones">
+                                <field name="delegacion_ids" context="{'default_oferta_id': active_id}">
+                                    <tree decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'">
+                                        <field name="usuario_delegado_id"/>
+                                        <field name="tipo_delegacion"/>
+                                        <field name="fecha_delegacion"/>
+                                        <field name="fecha_vencimiento"/>
+                                        <field name="prioridad"/>
+                                        <field name="state" widget="badge"/>
+                                        <field name="dias_restantes"/>
+                                        <field name="vencida" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <!-- Pestaña de Información Adicional -->
+                            <page string="Información" name="info">
+                                <group>
+                                    <group string="Fechas">
+                                        <field name="create_date" readonly="1"/>
+                                        <field name="write_date" readonly="1"/>
+                                    </group>
+                                    <group string="Estadísticas">
+                                        <field name="capitulos_count" readonly="1"/>
+                                        <field name="clausulas_count" readonly="1"/>
+                                        <field name="delegaciones_count" readonly="1"/>
+                                        <field name="tarifas_count" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Vista de Búsqueda de Ofertas -->
+        <record id="view_oferta_search" model="ir.ui.view">
+            <field name="name">oferta.oferta.search</field>
+            <field name="model">oferta.oferta</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Ofertas">
+                    <field name="numero_oferta"/>
+                    <field name="name"/>
+                    <field name="cliente_id"/>
+                    <field name="user_id"/>
+                    <field name="tecnico_comercial_id"/>
+                    <separator/>
+                    <filter name="mis_ofertas" string="Mis Ofertas" domain="[('user_id', '=', uid)]"/>
+                    <filter name="borrador" string="Borrador" domain="[('state', '=', 'borrador')]"/>
+                    <filter name="revision" string="En Revisión" domain="[('state', '=', 'revision')]"/>
+                    <filter name="aprobada" string="Aprobadas" domain="[('state', '=', 'aprobada')]"/>
+                    <filter name="enviada" string="Enviadas" domain="[('state', '=', 'enviada')]"/>
+                    <filter name="aceptada" string="Aceptadas" domain="[('state', '=', 'aceptada')]"/>
+                    <separator/>
+                    <filter name="proyectos" string="Proyectos" domain="[('tipo_oferta', '=', 'proyectos')]"/>
+                    <filter name="venta_directa" string="Venta Directa" domain="[('tipo_oferta', '=', 'venta_directa')]"/>
+                    <separator/>
+                    <filter name="vencidas" string="Vencidas" domain="[('fecha_vencimiento', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter name="este_mes" string="Este Mes" domain="[('fecha_oferta', '&gt;=', context_today().replace(day=1).strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <filter name="integridad_problemas" string="Con Problemas de Integridad" domain="[('integridad_ok', '=', False)]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
+                        <filter name="group_tipo" string="Tipo" context="{'group_by': 'tipo_oferta'}"/>
+                        <filter name="group_cliente" string="Cliente" context="{'group_by': 'cliente_id'}"/>
+                        <filter name="group_user" string="Responsable" context="{'group_by': 'user_id'}"/>
+                        <filter name="group_fecha" string="Fecha" context="{'group_by': 'fecha_oferta'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Vista Kanban de Ofertas -->
+        <record id="view_oferta_kanban" model="ir.ui.view">
+            <field name="name">oferta.oferta.kanban</field>
+            <field name="model">oferta.oferta</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="o_kanban_small_column">
+                    <field name="numero_oferta"/>
+                    <field name="name"/>
+                    <field name="cliente_id"/>
+                    <field name="monto_total"/>
+                    <field name="currency_id"/>
+                    <field name="state"/>
+                    <field name="tipo_oferta"/>
+                    <field name="fecha_vencimiento"/>
+                    <field name="integridad_ok"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="numero_oferta"/>
+                                        </strong>
+                                        <br/>
+                                        <span class="o_kanban_record_subtitle">
+                                            <field name="name"/>
+                                        </span>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section">
+                                        <a class="o_kanban_manage_toggle_button" href="#">
+                                            <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="o_kanban_tags_section">
+                                        <span class="badge badge-pill" t-attf-class="badge-#{record.tipo_oferta.raw_value == 'proyectos' ? 'primary' : 'secondary'}">
+                                            <t t-esc="record.tipo_oferta.value"/>
+                                        </span>
+                                        <span class="badge badge-pill badge-warning" t-if="!record.integridad_ok.raw_value">
+                                            Problemas
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-user" title="Cliente"/> <field name="cliente_id"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-money" title="Monto"/> <field name="monto_total" widget="monetary"/>
+                                    </div>
+                                    <div t-if="record.fecha_vencimiento.raw_value">
+                                        <i class="fa fa-calendar" title="Vencimiento"/> <field name="fecha_vencimiento"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <img t-att-src="kanban_image('res.users', 'avatar_128', record.user_id.raw_value)" t-att-title="record.user_id.value" t-att-alt="record.user_id.value" class="oe_kanban_avatar"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Acción de Ventana para Ofertas -->
+        <record id="action_oferta_oferta" model="ir.actions.act_window">
+            <field name="name">Ofertas</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_oferta_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡Crea tu primera oferta!
+                </p>
+                <p>
+                    Las ofertas te permiten gestionar propuestas comerciales de manera estructurada,
+                    con capítulos, tarifas, cláusulas y delegaciones.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

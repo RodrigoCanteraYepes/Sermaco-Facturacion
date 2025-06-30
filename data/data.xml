@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Cláusulas Generales Predeterminadas -->
+        <record id="clausula_general_validez" model="oferta.clausula">
+            <field name="codigo">GEN001</field>
+            <field name="nombre">Validez de la Oferta</field>
+            <field name="tipo">general</field>
+            <field name="contenido">Esta oferta tiene una validez de 30 días calendario a partir de la fecha de emisión. Transcurrido este plazo, los precios y condiciones podrán ser modificados sin previo aviso.</field>
+            <field name="descripcion">Cláusula estándar sobre la validez temporal de la oferta</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">True</field>
+            <field name="secuencia">10</field>
+        </record>
+        
+        <record id="clausula_general_precios" model="oferta.clausula">
+            <field name="codigo">GEN002</field>
+            <field name="nombre">Precios y Moneda</field>
+            <field name="tipo">general</field>
+            <field name="contenido">Todos los precios están expresados en la moneda indicada y no incluyen impuestos salvo indicación contraria. Los precios son firmes durante el período de validez de la oferta.</field>
+            <field name="descripcion">Cláusula sobre precios y moneda de la oferta</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">True</field>
+            <field name="secuencia">20</field>
+        </record>
+        
+        <record id="clausula_general_entrega" model="oferta.clausula">
+            <field name="codigo">GEN003</field>
+            <field name="nombre">Condiciones de Entrega</field>
+            <field name="tipo">general</field>
+            <field name="contenido">Los plazos de entrega son estimados y están sujetos a confirmación. La entrega se realizará en el domicilio indicado por el cliente, con los términos comerciales acordados.</field>
+            <field name="descripcion">Cláusula sobre condiciones y plazos de entrega</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">True</field>
+            <field name="secuencia">30</field>
+        </record>
+        
+        <record id="clausula_general_pago" model="oferta.clausula">
+            <field name="codigo">GEN004</field>
+            <field name="nombre">Condiciones de Pago</field>
+            <field name="tipo">general</field>
+            <field name="contenido">Las condiciones de pago serán acordadas según las políticas comerciales vigentes. El pago deberá realizarse en los plazos establecidos para mantener la validez de la oferta.</field>
+            <field name="descripcion">Cláusula sobre condiciones de pago</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">True</field>
+            <field name="secuencia">40</field>
+        </record>
+        
+        <!-- Cláusulas Específicas para Proyectos -->
+        <record id="clausula_proyecto_garantia" model="oferta.clausula">
+            <field name="codigo">PROY001</field>
+            <field name="nombre">Garantía del Proyecto</field>
+            <field name="tipo">especifica</field>
+            <field name="contenido">El proyecto incluye garantía de 12 meses sobre defectos de fabricación y 6 meses sobre instalación, contados a partir de la fecha de entrega y puesta en marcha.</field>
+            <field name="descripcion">Cláusula de garantía específica para proyectos</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">False</field>
+            <field name="secuencia">50</field>
+        </record>
+        
+        <record id="clausula_proyecto_instalacion" model="oferta.clausula">
+            <field name="codigo">PROY002</field>
+            <field name="nombre">Instalación y Puesta en Marcha</field>
+            <field name="tipo">especifica</field>
+            <field name="contenido">El precio incluye instalación y puesta en marcha por personal técnico especializado. El cliente deberá proporcionar las condiciones necesarias para la instalación.</field>
+            <field name="descripcion">Cláusula sobre instalación para proyectos</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">False</field>
+            <field name="secuencia">60</field>
+        </record>
+        
+        <record id="clausula_proyecto_capacitacion" model="oferta.clausula">
+            <field name="codigo">PROY003</field>
+            <field name="nombre">Capacitación del Personal</field>
+            <field name="tipo">especifica</field>
+            <field name="contenido">Se incluye capacitación básica del personal del cliente para el manejo y mantenimiento del sistema instalado, con una duración de 8 horas.</field>
+            <field name="descripcion">Cláusula sobre capacitación en proyectos</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">False</field>
+            <field name="secuencia">70</field>
+        </record>
+        
+        <!-- Cláusulas Específicas para Venta Directa -->
+        <record id="clausula_venta_transporte" model="oferta.clausula">
+            <field name="codigo">VD001</field>
+            <field name="nombre">Transporte y Logística</field>
+            <field name="tipo">especifica</field>
+            <field name="contenido">El transporte está incluido para entregas dentro del área metropolitana. Para entregas fuera de esta zona, se aplicarán costos adicionales según tarifa vigente.</field>
+            <field name="descripcion">Cláusula sobre transporte para venta directa</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">False</field>
+            <field name="aplica_venta_directa">True</field>
+            <field name="secuencia">80</field>
+        </record>
+        
+        <record id="clausula_venta_stock" model="oferta.clausula">
+            <field name="codigo">VD002</field>
+            <field name="nombre">Disponibilidad de Stock</field>
+            <field name="tipo">especifica</field>
+            <field name="contenido">Los productos están sujetos a disponibilidad de stock. En caso de no disponibilidad, se informará al cliente y se acordará un plazo de reposición.</field>
+            <field name="descripcion">Cláusula sobre disponibilidad para venta directa</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">False</field>
+            <field name="aplica_venta_directa">True</field>
+            <field name="secuencia">90</field>
+        </record>
+        
+        <!-- Cláusulas por Monto -->
+        <record id="clausula_monto_alto" model="oferta.clausula">
+            <field name="codigo">MONT001</field>
+            <field name="nombre">Condiciones Especiales - Monto Alto</field>
+            <field name="tipo">especifica</field>
+            <field name="contenido">Para ofertas de monto superior a $50,000, se aplicarán condiciones comerciales especiales que incluyen descuentos por volumen y facilidades de pago extendidas.</field>
+            <field name="descripcion">Cláusula para ofertas de monto alto</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">True</field>
+            <field name="monto_minimo">50000</field>
+            <field name="secuencia">100</field>
+        </record>
+        
+        <record id="clausula_monto_bajo" model="oferta.clausula">
+            <field name="codigo">MONT002</field>
+            <field name="nombre">Condiciones Estándar - Monto Bajo</field>
+            <field name="tipo">especifica</field>
+            <field name="contenido">Para ofertas de monto inferior a $5,000, se aplicarán las condiciones comerciales estándar con pago anticipado o contra entrega.</field>
+            <field name="descripcion">Cláusula para ofertas de monto bajo</field>
+            <field name="activa">True</field>
+            <field name="aplica_proyectos">True</field>
+            <field name="aplica_venta_directa">True</field>
+            <field name="monto_maximo">5000</field>
+            <field name="secuencia">110</field>
+        </record>
+        
+        <!-- Configuraciones del Sistema -->
+        <record id="config_dias_vencimiento_oferta" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.dias_vencimiento_oferta</field>
+            <field name="value">30</field>
+        </record>
+        
+        <record id="config_margen_minimo_oferta" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.margen_minimo_oferta</field>
+            <field name="value">15.0</field>
+        </record>
+        
+        <record id="config_monto_delegacion_obligatoria" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.monto_delegacion_obligatoria</field>
+            <field name="value">25000</field>
+        </record>
+        
+        <record id="config_generar_oferta_automatica" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.generar_oferta_automatica</field>
+            <field name="value">True</field>
+        </record>
+        
+        <record id="config_dias_notificacion_delegacion" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.dias_notificacion_delegacion</field>
+            <field name="value">3</field>
+        </record>
+        
+        <record id="config_limite_delegaciones_usuario" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.limite_delegaciones_usuario</field>
+            <field name="value">10</field>
+        </record>
+        
+        <!-- Secuencia para numeración de ofertas -->
+        <record id="seq_oferta_numero" model="ir.sequence">
+            <field name="name">Numeración de Ofertas</field>
+            <field name="code">oferta.oferta.numero</field>
+            <field name="prefix">OF</field>
+            <field name="suffix"></field>
+            <field name="padding">6</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="implementation">standard</field>
+        </record>
+        
+        <!-- Tipos de delegación predeterminados -->
+        <record id="tipo_delegacion_tecnica" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.tipos_delegacion</field>
+            <field name="value">tecnica,comercial,administrativa,logistica,financiera</field>
+        </record>
+        
+        <!-- Áreas responsables predeterminadas -->
+        <record id="areas_responsables" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.areas_responsables</field>
+            <field name="value">ventas,ingenieria,compras,logistica,administracion,gerencia</field>
+        </record>
+        
+        <!-- Configuración de monedas por defecto -->
+        <record id="config_moneda_default" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.moneda_default</field>
+            <field name="value">USD</field>
+        </record>
+        
+        <!-- Configuración de descuentos máximos -->
+        <record id="config_descuento_maximo" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.descuento_maximo_porcentaje</field>
+            <field name="value">25.0</field>
+        </record>
+        
+        <record id="config_descuento_maximo_fijo" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.descuento_maximo_fijo</field>
+            <field name="value">10000</field>
+        </record>
+        
+        <!-- Configuración de validez de tarifas -->
+        <record id="config_validez_tarifa_default" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.validez_tarifa_default_dias</field>
+            <field name="value">90</field>
+        </record>
+        
+        <!-- Configuración de automatizaciones -->
+        <record id="config_auto_crear_capitulos" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.auto_crear_capitulos</field>
+            <field name="value">True</field>
+        </record>
+        
+        <record id="config_auto_aplicar_clausulas" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.auto_aplicar_clausulas</field>
+            <field name="value">True</field>
+        </record>
+        
+        <record id="config_auto_crear_tarifas" model="ir.config_parameter">
+            <field name="key">gestion_ofertas.auto_crear_tarifas</field>
+            <field name="value">True</field>
+        </record>
+        
+    </data>
+</odoo>

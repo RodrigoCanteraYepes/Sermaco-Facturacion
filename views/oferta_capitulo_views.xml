@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Vista de Lista de Capítulos -->
+        <record id="view_oferta_capitulo_tree" model="ir.ui.view">
+            <field name="name">oferta.capitulo.tree</field>
+            <field name="model">oferta.capitulo</field>
+            <field name="arch" type="xml">
+                <tree string="Capítulos" editable="bottom" decoration-muted="not active">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="descripcion"/>
+                    <field name="oferta_id" readonly="1"/>
+                    <field name="productos_count"/>
+                    <field name="clausulas_count"/>
+                    <field name="subtotal" widget="monetary" sum="Total"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="active" widget="boolean_toggle"/>
+                    <field name="tiene_productos" invisible="1"/>
+                    <field name="productos_sin_precio" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Vista de Formulario de Capítulos -->
+        <record id="view_oferta_capitulo_form" model="ir.ui.view">
+            <field name="name">oferta.capitulo.form</field>
+            <field name="model">oferta.capitulo</field>
+            <field name="arch" type="xml">
+                <form string="Capítulo">
+                    <header>
+                        <button name="action_agregar_productos_categoria" type="object" string="Agregar Productos por Categoría" class="btn-primary"/>
+                        <button name="action_generar_clausulas_especificas" type="object" string="Generar Cláusulas Específicas" class="btn-secondary"/>
+                        <button name="action_duplicar_capitulo" type="object" string="Duplicar Capítulo" class="btn-secondary"/>
+                        <button name="action_ver_productos" type="object" string="Ver Productos" class="btn-info" attrs="{'invisible': [('productos_count', '=', 0)]}"/>
+                        <button name="action_ver_tarifas" type="object" string="Ver Tarifas" class="btn-info" attrs="{'invisible': [('productos_count', '=', 0)]}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_ver_productos" type="object" class="oe_stat_button" icon="fa-cube">
+                                <field name="productos_count" widget="statinfo" string="Productos"/>
+                            </button>
+                            <button name="action_ver_clausulas" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                                <field name="clausulas_count" widget="statinfo" string="Cláusulas"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Nombre del capítulo..."/>
+                            </h1>
+                        </div>
+                        
+                        <!-- Alertas -->
+                        <div class="alert alert-warning" role="alert" attrs="{'invisible': [('productos_sin_precio', '=', False)]}">
+                            <strong>¡Atención!</strong> Este capítulo tiene productos sin precio definido.
+                        </div>
+                        
+                        <div class="alert alert-info" role="alert" attrs="{'invisible': [('tiene_productos', '=', True)]}">
+                            <strong>Información:</strong> Este capítulo no tiene productos asignados.
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="oferta_id" readonly="1"/>
+                                <field name="sequence"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="subtotal" widget="monetary"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="descripcion" placeholder="Descripción detallada del capítulo..."/>
+                        </group>
+                        
+                        <!-- Campos ocultos para validaciones -->
+                        <group invisible="1">
+                            <field name="tiene_productos"/>
+                            <field name="productos_sin_precio"/>
+                        </group>
+                        
+                        <notebook>
+                            <!-- Pestaña de Productos -->
+                            <page string="Productos" name="productos">
+                                <field name="producto_ids">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="default_code"/>
+                                        <field name="categ_id"/>
+                                        <field name="list_price" widget="monetary"/>
+                                        <field name="standard_price" widget="monetary"/>
+                                        <field name="uom_id"/>
+                                        <field name="active" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <!-- Pestaña de Cláusulas -->
+                            <page string="Cláusulas" name="clausulas">
+                                <field name="clausula_ids">
+                                    <tree>
+                                        <field name="codigo"/>
+                                        <field name="name"/>
+                                        <field name="tipo"/>
+                                        <field name="descripcion"/>
+                                        <field name="activa" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Vista de Búsqueda de Capítulos -->
+        <record id="view_oferta_capitulo_search" model="ir.ui.view">
+            <field name="name">oferta.capitulo.search</field>
+            <field name="model">oferta.capitulo</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Capítulos">
+                    <field name="name"/>
+                    <field name="descripcion"/>
+                    <field name="oferta_id"/>
+                    <separator/>
+                    <filter name="activos" string="Activos" domain="[('active', '=', True)]"/>
+                    <filter name="inactivos" string="Inactivos" domain="[('active', '=', False)]"/>
+                    <separator/>
+                    <filter name="con_productos" string="Con Productos" domain="[('tiene_productos', '=', True)]"/>
+                    <filter name="sin_productos" string="Sin Productos" domain="[('tiene_productos', '=', False)]"/>
+                    <filter name="productos_sin_precio" string="Productos Sin Precio" domain="[('productos_sin_precio', '=', True)]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_oferta" string="Oferta" context="{'group_by': 'oferta_id'}"/>
+                        <filter name="group_active" string="Estado" context="{'group_by': 'active'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Vista Kanban de Capítulos -->
+        <record id="view_oferta_capitulo_kanban" model="ir.ui.view">
+            <field name="name">oferta.capitulo.kanban</field>
+            <field name="model">oferta.capitulo</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="descripcion"/>
+                    <field name="productos_count"/>
+                    <field name="clausulas_count"/>
+                    <field name="subtotal"/>
+                    <field name="currency_id"/>
+                    <field name="active"/>
+                    <field name="tiene_productos"/>
+                    <field name="productos_sin_precio"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click" t-attf-class="#{!record.active.raw_value ? 'o_kanban_color_2' : ''}">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section">
+                                        <a class="o_kanban_manage_toggle_button" href="#">
+                                            <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="o_kanban_tags_section">
+                                        <span class="badge badge-pill badge-success" t-if="record.active.raw_value">Activo</span>
+                                        <span class="badge badge-pill badge-secondary" t-if="!record.active.raw_value">Inactivo</span>
+                                        <span class="badge badge-pill badge-warning" t-if="record.productos_sin_precio.raw_value">Sin Precios</span>
+                                        <span class="badge badge-pill badge-info" t-if="!record.tiene_productos.raw_value">Sin Productos</span>
+                                    </div>
+                                    <div t-if="record.descripcion.raw_value">
+                                        <i class="fa fa-file-text-o" title="Descripción"/> <t t-esc="record.descripcion.value"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-cube" title="Productos"/> <t t-esc="record.productos_count.value"/> productos
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-file-text" title="Cláusulas"/> <t t-esc="record.clausulas_count.value"/> cláusulas
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-money" title="Subtotal"/> <field name="subtotal" widget="monetary"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Acción de Ventana para Capítulos -->
+        <record id="action_oferta_capitulo" model="ir.actions.act_window">
+            <field name="name">Capítulos de Ofertas</field>
+            <field name="res_model">oferta.capitulo</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_oferta_capitulo_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡Crea tu primer capítulo!
+                </p>
+                <p>
+                    Los capítulos te permiten organizar los productos de una oferta
+                    de manera estructurada y aplicar cláusulas específicas.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

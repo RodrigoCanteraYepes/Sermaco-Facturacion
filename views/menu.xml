@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Menú principal de Ofertas -->
+        <menuitem id="menu_ofertas_main" name="Gestión de Ofertas" sequence="15" web_icon="gestion_ofertas_etapa_ofertando,static/description/icon.png"/>
+        
+        <!-- Submenú de Ofertas -->
+        <menuitem id="menu_ofertas_ofertas" name="Ofertas" parent="menu_ofertas_main" sequence="10"/>
+        
+        <!-- Acción principal para ofertas -->
+        <record id="action_ofertas_all" model="ir.actions.act_window">
+            <field name="name">Todas las Ofertas</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">kanban,tree,form,pivot,graph</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡Crea tu primera oferta!
+                </p>
+                <p>
+                    Las ofertas te permiten gestionar propuestas comerciales de manera estructurada,
+                    con capítulos, tarifas, cláusulas y delegaciones.
+                </p>
+            </field>
+        </record>
+        
+        <!-- Menú para todas las ofertas -->
+        <menuitem id="menu_ofertas_all" name="Todas las Ofertas" parent="menu_ofertas_ofertas" action="action_ofertas_all" sequence="10"/>
+        
+        <!-- Acción para mis ofertas -->
+        <record id="action_mis_ofertas" model="ir.actions.act_window">
+            <field name="name">Mis Ofertas</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('tecnico_comercial_id', '=', uid)]</field>
+            <field name="context">{'default_tecnico_comercial_id': uid}</field>
+        </record>
+        
+        <!-- Menú para mis ofertas -->
+        <menuitem id="menu_mis_ofertas" name="Mis Ofertas" parent="menu_ofertas_ofertas" action="action_mis_ofertas" sequence="20"/>
+        
+        <!-- Acción para ofertas por aprobar -->
+        <record id="action_ofertas_por_aprobar" model="ir.actions.act_window">
+            <field name="name">Ofertas por Aprobar</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('estado', '=', 'revision')]</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <!-- Menú para ofertas por aprobar -->
+        <menuitem id="menu_ofertas_por_aprobar" name="Por Aprobar" parent="menu_ofertas_ofertas" action="action_ofertas_por_aprobar" sequence="30" groups="gestion_ofertas_etapa_ofertando.group_oferta_manager,gestion_ofertas_etapa_ofertando.group_oferta_approver"/>
+        
+        <!-- Submenú de Configuración -->
+        <menuitem id="menu_ofertas_configuracion" name="Configuración" parent="menu_ofertas_main" sequence="90"/>
+        
+        <!-- Acción para capítulos -->
+        <record id="action_capitulos" model="ir.actions.act_window">
+            <field name="name">Capítulos</field>
+            <field name="res_model">oferta.capitulo</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <!-- Menú para capítulos -->
+        <menuitem id="menu_capitulos" name="Capítulos" parent="menu_ofertas_configuracion" action="action_capitulos" sequence="10"/>
+        
+        <!-- Acción para cláusulas -->
+        <record id="action_clausulas" model="ir.actions.act_window">
+            <field name="name">Cláusulas</field>
+            <field name="res_model">oferta.clausula</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <!-- Menú para cláusulas -->
+        <menuitem id="menu_clausulas" name="Cláusulas" parent="menu_ofertas_configuracion" action="action_clausulas" sequence="20"/>
+        
+        <!-- Acción para tarifas -->
+        <record id="action_tarifas" model="ir.actions.act_window">
+            <field name="name">Tarifas</field>
+            <field name="res_model">oferta.tarifa</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <!-- Menú para tarifas -->
+        <menuitem id="menu_tarifas" name="Tarifas" parent="menu_ofertas_configuracion" action="action_tarifas" sequence="30"/>
+        
+        <!-- Submenú de Delegaciones -->
+        <menuitem id="menu_ofertas_delegaciones" name="Delegaciones" parent="menu_ofertas_main" sequence="50"/>
+        
+        <!-- Acción para todas las delegaciones -->
+        <record id="action_delegaciones_all" model="ir.actions.act_window">
+            <field name="name">Todas las Delegaciones</field>
+            <field name="res_model">oferta.delegacion</field>
+            <field name="view_mode">tree,form,kanban,calendar</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <!-- Menú para todas las delegaciones -->
+        <menuitem id="menu_delegaciones_all" name="Todas las Delegaciones" parent="menu_ofertas_delegaciones" action="action_delegaciones_all" sequence="10"/>
+        
+        <!-- Acción para mis delegaciones -->
+        <record id="action_mis_delegaciones" model="ir.actions.act_window">
+            <field name="name">Mis Delegaciones</field>
+            <field name="res_model">oferta.delegacion</field>
+            <field name="view_mode">kanban,tree,form,calendar</field>
+            <field name="domain">[('usuario_delegado_id', '=', uid)]</field>
+            <field name="context">{'default_usuario_delegado_id': uid}</field>
+        </record>
+        
+        <!-- Menú para mis delegaciones -->
+        <menuitem id="menu_mis_delegaciones" name="Mis Delegaciones" parent="menu_ofertas_delegaciones" action="action_mis_delegaciones" sequence="20"/>
+        
+        <!-- Acción para delegaciones pendientes -->
+        <record id="action_delegaciones_pendientes" model="ir.actions.act_window">
+            <field name="name">Delegaciones Pendientes</field>
+            <field name="res_model">oferta.delegacion</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('usuario_delegado_id', '=', uid), ('estado', 'in', ['pendiente', 'aceptada', 'en_progreso'])]</field>
+            <field name="context">{'default_usuario_delegado_id': uid}</field>
+        </record>
+        
+        <!-- Menú para delegaciones pendientes -->
+        <menuitem id="menu_delegaciones_pendientes" name="Pendientes" parent="menu_ofertas_delegaciones" action="action_delegaciones_pendientes" sequence="30"/>
+        
+        <!-- Submenú de Reportes -->
+        <menuitem id="menu_ofertas_reportes" name="Reportes" parent="menu_ofertas_main" sequence="80"/>
+        
+        <!-- Acción para reporte de ofertas por estado -->
+        <record id="action_reporte_ofertas_estado" model="ir.actions.act_window">
+            <field name="name">Ofertas por Estado</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="context">{'group_by': ['estado'], 'search_default_group_by_estado': 1}</field>
+        </record>
+        
+        <!-- Menú para reporte de ofertas por estado -->
+        <menuitem id="menu_reporte_ofertas_estado" name="Ofertas por Estado" parent="menu_ofertas_reportes" action="action_reporte_ofertas_estado" sequence="10"/>
+        
+        <!-- Acción para reporte de ofertas por tipo -->
+        <record id="action_reporte_ofertas_tipo" model="ir.actions.act_window">
+            <field name="name">Ofertas por Tipo</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="context">{'group_by': ['tipo_oferta'], 'search_default_group_by_tipo': 1}</field>
+        </record>
+        
+        <!-- Menú para reporte de ofertas por tipo -->
+        <menuitem id="menu_reporte_ofertas_tipo" name="Ofertas por Tipo" parent="menu_ofertas_reportes" action="action_reporte_ofertas_tipo" sequence="20"/>
+        
+        <!-- Acción para reporte de tarifas -->
+        <record id="action_reporte_tarifas" model="ir.actions.act_window">
+            <field name="name">Análisis de Tarifas</field>
+            <field name="res_model">oferta.tarifa</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="context">{'group_by': ['producto_id'], 'search_default_group_by_producto': 1}</field>
+        </record>
+        
+        <!-- Menú para reporte de tarifas -->
+        <menuitem id="menu_reporte_tarifas" name="Análisis de Tarifas" parent="menu_ofertas_reportes" action="action_reporte_tarifas" sequence="30"/>
+        
+        <!-- Integración con CRM -->
+        <menuitem id="menu_crm_ofertas" name="Ofertas" parent="crm.crm_menu_root" sequence="15"/>
+        
+        <!-- Acción para ofertas desde CRM -->
+        <record id="action_ofertas_crm" model="ir.actions.act_window">
+            <field name="name">Ofertas CRM</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('oportunidad_id', '!=', False)]</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <!-- Menú para ofertas en CRM -->
+        <menuitem id="menu_ofertas_crm" name="Ofertas" parent="menu_crm_ofertas" action="action_ofertas_crm" sequence="10"/>
+        
+        <!-- Integración con Ventas -->
+        <menuitem id="menu_sale_ofertas" name="Ofertas" parent="sale.sale_menu_root" sequence="15"/>
+        
+        <!-- Acción para ofertas desde Ventas -->
+        <record id="action_ofertas_sale" model="ir.actions.act_window">
+            <field name="name">Ofertas de Ventas</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <!-- Menú para ofertas en Ventas -->
+        <menuitem id="menu_ofertas_sale" name="Gestión de Ofertas" parent="menu_sale_ofertas" action="action_ofertas_sale" sequence="10"/>
+        
+    </data>
+</odoo>

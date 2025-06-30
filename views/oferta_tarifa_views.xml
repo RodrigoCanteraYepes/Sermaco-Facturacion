@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Vista de Lista de Tarifas -->
+        <record id="view_oferta_tarifa_tree" model="ir.ui.view">
+            <field name="name">oferta.tarifa.tree</field>
+            <field name="model">oferta.tarifa</field>
+            <field name="arch" type="xml">
+                <tree string="Tarifas" editable="bottom" decoration-muted="not active" decoration-warning="not vigente">
+                    <field name="producto_id"/>
+                    <field name="cantidad"/>
+                    <field name="precio_unitario" widget="monetary"/>
+                    <field name="descuento_porcentaje" widget="percentage"/>
+                    <field name="descuento_fijo" widget="monetary"/>
+                    <field name="precio_con_descuento" widget="monetary"/>
+                    <field name="total_con_descuento" widget="monetary" sum="Total"/>
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_fin"/>
+                    <field name="tipo_tarifa"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="active" widget="boolean_toggle"/>
+                    <field name="vigente" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Vista de Formulario de Tarifas -->
+        <record id="view_oferta_tarifa_form" model="ir.ui.view">
+            <field name="name">oferta.tarifa.form</field>
+            <field name="model">oferta.tarifa</field>
+            <field name="arch" type="xml">
+                <form string="Tarifa">
+                    <header>
+                        <button name="action_aplicar_descuento_volumen" type="object" string="Aplicar Descuento por Volumen" class="btn-primary"/>
+                        <button name="action_copiar_precio_lista" type="object" string="Copiar Precio de Lista" class="btn-secondary"/>
+                        <button name="action_aplicar_margen_objetivo" type="object" string="Aplicar Margen Objetivo" class="btn-secondary"/>
+                        <button name="action_extender_vigencia" type="object" string="Extender Vigencia" class="btn-info" attrs="{'invisible': [('vigente', '=', True)]}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="producto_id" placeholder="Seleccionar producto..."/>
+                            </h1>
+                        </div>
+                        
+                        <!-- Alertas -->
+                        <div class="alert alert-warning" role="alert" attrs="{'invisible': [('vigente', '=', True)]}">
+                            <strong>¡Atención!</strong> Esta tarifa no está vigente según las fechas configuradas.
+                        </div>
+                        
+                        <div class="alert alert-info" role="alert" attrs="{'invisible': [('active', '=', True)]}">
+                            <strong>Información:</strong> Esta tarifa está desactivada.
+                        </div>
+                        
+                        <group>
+                            <group string="Información Básica">
+                                <field name="oferta_id" readonly="1"/>
+                                <field name="capitulo_id" readonly="1" attrs="{'invisible': [('capitulo_id', '=', False)]}"/>
+                                <field name="unidad_medida_id"/>
+                                <field name="tipo_tarifa"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                            <group string="Vigencia">
+                                <field name="fecha_inicio"/>
+                                <field name="fecha_fin"/>
+                                <field name="dias_vigencia" readonly="1"/>
+                                <field name="vigente" readonly="1" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group string="Cantidad y Precios">
+                                <field name="cantidad"/>
+                                <field name="precio_lista" widget="monetary" readonly="1"/>
+                                <field name="precio_unitario" widget="monetary"/>
+                                <field name="precio_total" widget="monetary" readonly="1"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                            </group>
+                            <group string="Descuentos">
+                                <field name="descuento_porcentaje" widget="percentage"/>
+                                <field name="descuento_fijo" widget="monetary"/>
+                                <field name="precio_con_descuento" widget="monetary" readonly="1"/>
+                                <field name="total_con_descuento" widget="monetary" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group string="Costos y Márgenes">
+                                <field name="costo_producto" widget="monetary" readonly="1"/>
+                                <field name="margen_unitario" widget="monetary" readonly="1"/>
+                                <field name="margen_porcentaje" widget="percentage" readonly="1"/>
+                                <field name="margen_total" widget="monetary" readonly="1"/>
+                            </group>
+                            <group string="Observaciones">
+                                <field name="observaciones" placeholder="Observaciones sobre la tarifa..."/>
+                                <field name="condiciones_especiales" placeholder="Condiciones especiales..."/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Vista de Búsqueda de Tarifas -->
+        <record id="view_oferta_tarifa_search" model="ir.ui.view">
+            <field name="name">oferta.tarifa.search</field>
+            <field name="model">oferta.tarifa</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Tarifas">
+                    <field name="producto_id"/>
+                    <field name="oferta_id"/>
+                    <field name="capitulo_id"/>
+                    <separator/>
+                    <filter name="activas" string="Activas" domain="[('active', '=', True)]"/>
+                    <filter name="inactivas" string="Inactivas" domain="[('active', '=', False)]"/>
+                    <separator/>
+                    <filter name="vigentes" string="Vigentes" domain="[('vigente', '=', True)]"/>
+                    <filter name="no_vigentes" string="No Vigentes" domain="[('vigente', '=', False)]"/>
+                    <separator/>
+                    <filter name="con_descuento" string="Con Descuento" domain="['|', ('descuento_porcentaje', '>', 0), ('descuento_fijo', '>', 0)]"/>
+                    <filter name="sin_descuento" string="Sin Descuento" domain="[('descuento_porcentaje', '=', 0), ('descuento_fijo', '=', 0)]"/>
+                    <separator/>
+                    <filter name="margen_bajo" string="Margen Bajo (&lt;10%)" domain="[('margen_porcentaje', '&lt;', 10)]"/>
+                    <filter name="margen_medio" string="Margen Medio (10-25%)" domain="[('margen_porcentaje', '&gt;=', 10), ('margen_porcentaje', '&lt;=', 25)]"/>
+                    <filter name="margen_alto" string="Margen Alto (&gt;25%)" domain="[('margen_porcentaje', '&gt;', 25)]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_producto" string="Producto" context="{'group_by': 'producto_id'}"/>
+                        <filter name="group_oferta" string="Oferta" context="{'group_by': 'oferta_id'}"/>
+                        <filter name="group_capitulo" string="Capítulo" context="{'group_by': 'capitulo_id'}"/>
+                        <filter name="group_tipo" string="Tipo" context="{'group_by': 'tipo_tarifa'}"/>
+                        <filter name="group_vigente" string="Vigencia" context="{'group_by': 'vigente'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Vista Kanban de Tarifas -->
+        <record id="view_oferta_tarifa_kanban" model="ir.ui.view">
+            <field name="name">oferta.tarifa.kanban</field>
+            <field name="model">oferta.tarifa</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_small_column">
+                    <field name="producto_id"/>
+                    <field name="cantidad"/>
+                    <field name="precio_unitario"/>
+                    <field name="total_con_descuento"/>
+                    <field name="currency_id"/>
+                    <field name="active"/>
+                    <field name="vigente"/>
+                    <field name="margen_porcentaje"/>
+                    <field name="descuento_porcentaje"/>
+                    <field name="tipo_tarifa"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click" t-attf-class="#{!record.active.raw_value ? 'o_kanban_color_2' : ''}">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="producto_id"/>
+                                        </strong>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section">
+                                        <a class="o_kanban_manage_toggle_button" href="#">
+                                            <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="o_kanban_tags_section">
+                                        <span class="badge badge-pill badge-primary" t-esc="record.tipo_tarifa.value"/>
+                                        <span class="badge badge-pill badge-success" t-if="record.active.raw_value and record.vigente.raw_value">Vigente</span>
+                                        <span class="badge badge-pill badge-secondary" t-if="!record.active.raw_value">Inactiva</span>
+                                        <span class="badge badge-pill badge-warning" t-if="record.active.raw_value and !record.vigente.raw_value">No Vigente</span>
+                                        <span class="badge badge-pill badge-info" t-if="record.descuento_porcentaje.raw_value > 0">Con Descuento</span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-cubes" title="Cantidad"/> <t t-esc="record.cantidad.value"/> unidades
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-money" title="Precio Unitario"/> <field name="precio_unitario" widget="monetary"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-calculator" title="Total"/> <field name="total_con_descuento" widget="monetary"/>
+                                    </div>
+                                    <div t-if="record.margen_porcentaje.raw_value">
+                                        <i class="fa fa-line-chart" title="Margen"/> <t t-esc="Math.round(record.margen_porcentaje.raw_value)"/>%
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Vista Pivot de Tarifas -->
+        <record id="view_oferta_tarifa_pivot" model="ir.ui.view">
+            <field name="name">oferta.tarifa.pivot</field>
+            <field name="model">oferta.tarifa</field>
+            <field name="arch" type="xml">
+                <pivot string="Análisis de Tarifas">
+                    <field name="producto_id" type="row"/>
+                    <field name="tipo_tarifa" type="col"/>
+                    <field name="total_con_descuento" type="measure"/>
+                    <field name="margen_total" type="measure"/>
+                    <field name="cantidad" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        
+        <!-- Vista Graph de Tarifas -->
+        <record id="view_oferta_tarifa_graph" model="ir.ui.view">
+            <field name="name">oferta.tarifa.graph</field>
+            <field name="model">oferta.tarifa</field>
+            <field name="arch" type="xml">
+                <graph string="Gráfico de Tarifas" type="bar">
+                    <field name="producto_id"/>
+                    <field name="total_con_descuento" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        <!-- Acción de Ventana para Tarifas -->
+        <record id="action_oferta_tarifa" model="ir.actions.act_window">
+            <field name="name">Tarifas</field>
+            <field name="res_model">oferta.tarifa</field>
+            <field name="view_mode">kanban,tree,form,pivot,graph</field>
+            <field name="search_view_id" ref="view_oferta_tarifa_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡Crea tu primera tarifa!
+                </p>
+                <p>
+                    Las tarifas te permiten definir precios específicos para productos
+                    en ofertas, con descuentos y períodos de vigencia.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

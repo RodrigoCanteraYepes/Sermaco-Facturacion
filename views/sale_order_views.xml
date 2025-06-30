@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Extensión de la vista de formulario de Sale Order -->
+        <record id="view_sale_order_form_inherit" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.ofertas</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Agregar botones en el button_box -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_oferta_origen" type="object" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Ver Oferta</span>
+                            <span class="o_stat_value"><field name="numero_oferta"/></span>
+                        </div>
+                    </button>
+                    <button name="action_view_delegaciones_oferta" type="object" class="oe_stat_button" icon="fa-users" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Delegaciones</span>
+                        </div>
+                    </button>
+                    <button name="action_view_clausulas_oferta" type="object" class="oe_stat_button" icon="fa-list-alt" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Cláusulas</span>
+                        </div>
+                    </button>
+                </xpath>
+                
+                <!-- Agregar información de oferta origen después del partner -->
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="oferta_id" readonly="1" attrs="{'invisible': [('oferta_id', '=', False)]}"/>
+                </xpath>
+                
+                <!-- Agregar pestaña de Información de Oferta -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="Información de Oferta" name="oferta_info" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                        <group>
+                            <group string="Datos de la Oferta Origen">
+                                <field name="numero_oferta" readonly="1"/>
+                                <field name="tipo_oferta_origen" readonly="1"/>
+                                <field name="fecha_oferta_origen" readonly="1"/>
+                                <field name="margen_oferta" readonly="1" widget="percentage"/>
+                            </group>
+                            <group string="Acciones">
+                                <button name="action_generar_reporte_comparativo" type="object" string="Reporte Comparativo" class="btn-info"/>
+                                <button name="action_sincronizar_con_oferta" type="object" string="Sincronizar con Oferta" class="btn-warning"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Delegaciones de la oferta -->
+                        <group string="Delegaciones de la Oferta">
+                            <field name="delegaciones_oferta_ids" readonly="1">
+                                <tree>
+                                    <field name="usuario_delegado_id"/>
+                                    <field name="tipo_delegacion"/>
+                                    <field name="fecha_delegacion"/>
+                                    <field name="fecha_vencimiento"/>
+                                    <field name="estado" widget="badge"/>
+                                    <field name="prioridad" widget="priority"/>
+                                </tree>
+                            </field>
+                        </group>
+                        
+                        <!-- Cláusulas de la oferta -->
+                        <group string="Cláusulas de la Oferta">
+                            <field name="clausulas_oferta_ids" readonly="1">
+                                <tree>
+                                    <field name="codigo"/>
+                                    <field name="nombre"/>
+                                    <field name="tipo"/>
+                                    <field name="activa" widget="boolean_toggle"/>
+                                    <field name="contenido" widget="text"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+                
+                <!-- Campos ocultos para cálculos -->
+                <xpath expr="//sheet" position="inside">
+                    <group invisible="1">
+                        <field name="tiene_oferta_origen"/>
+                    </group>
+                </xpath>
+                
+                <!-- Alertas en la parte superior -->
+                <xpath expr="//sheet" position="before">
+                    <div class="alert alert-info" role="alert" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                        <strong>Información:</strong> Esta orden de venta fue generada desde la oferta <field name="numero_oferta" readonly="1"/>.
+                        Los cambios realizados aquí pueden sincronizarse con la oferta original.
+                    </div>
+                </xpath>
+                
+            </field>
+        </record>
+        
+        <!-- Extensión de la vista de lista de Sale Order -->
+        <record id="view_sale_order_tree_inherit" model="ir.ui.view">
+            <field name="name">sale.order.tree.inherit.ofertas</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="numero_oferta"/>
+                    <field name="tipo_oferta_origen"/>
+                    <field name="tiene_oferta_origen" widget="boolean_toggle"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Extensión de la vista de búsqueda de Sale Order -->
+        <record id="view_sale_order_search_inherit" model="ir.ui.view">
+            <field name="name">sale.order.search.inherit.ofertas</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                    <separator/>
+                    <filter name="con_oferta_origen" string="Con Oferta Origen" domain="[('tiene_oferta_origen', '=', True)]"/>
+                    <filter name="sin_oferta_origen" string="Sin Oferta Origen" domain="[('tiene_oferta_origen', '=', False)]"/>
+                    <filter name="tipo_proyectos" string="Tipo Proyectos" domain="[('tipo_oferta_origen', '=', 'proyectos')]"/>
+                    <filter name="tipo_venta_directa" string="Tipo Venta Directa" domain="[('tipo_oferta_origen', '=', 'venta_directa')]"/>
+                </xpath>
+                
+                <xpath expr="//group[@name='group_by']" position="inside">
+                    <filter name="group_by_tipo_oferta" string="Tipo de Oferta" context="{'group_by': 'tipo_oferta_origen'}"/>
+                    <filter name="group_by_numero_oferta" string="Número de Oferta" context="{'group_by': 'numero_oferta'}"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Vista Kanban extendida para Sale Order -->
+        <record id="view_sale_order_kanban_inherit" model="ir.ui.view">
+            <field name="name">sale.order.kanban.inherit.ofertas</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sale_order_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_kanban_tags_section']" position="inside">
+                    <span class="badge badge-pill badge-primary" t-if="record.tiene_oferta_origen.raw_value">
+                        Oferta: <t t-esc="record.numero_oferta.value"/>
+                    </span>
+                    <span class="badge badge-pill badge-info" t-if="record.tipo_oferta_origen.raw_value == 'proyectos'">
+                        Proyectos
+                    </span>
+                    <span class="badge badge-pill badge-success" t-if="record.tipo_oferta_origen.raw_value == 'venta_directa'">
+                        Venta Directa
+                    </span>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Acción para ver oferta origen -->
+        <record id="action_view_oferta_origen" model="ir.actions.act_window">
+            <field name="name">Oferta Origen</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+        
+        <!-- Acción para ver delegaciones de oferta -->
+        <record id="action_view_delegaciones_oferta" model="ir.actions.act_window">
+            <field name="name">Delegaciones de la Oferta</field>
+            <field name="res_model">oferta.delegacion</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        
+        <!-- Acción para ver cláusulas de oferta -->
+        <record id="action_view_clausulas_oferta" model="ir.actions.act_window">
+            <field name="name">Cláusulas de la Oferta</field>
+            <field name="res_model">oferta.clausula</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        
+    </data>
+</odoo>

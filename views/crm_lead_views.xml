@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Extensión de la vista de formulario de CRM Lead -->
+        <record id="view_crm_lead_form_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.form.inherit.ofertas</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Agregar botones en el button_box -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_ofertas" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                        <field name="ofertas_count" widget="statinfo" string="Ofertas"/>
+                    </button>
+                    <button name="action_crear_oferta" type="object" class="oe_stat_button" icon="fa-plus" attrs="{'invisible': [('stage_id.is_won', '=', False)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Crear Oferta</span>
+                        </div>
+                    </button>
+                </xpath>
+                
+                <!-- Agregar pestaña de Ofertas -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="Gestión de Ofertas" name="ofertas">
+                        <group>
+                            <group string="Configuración de Ofertas">
+                                <field name="generar_oferta_automatica" widget="boolean_toggle"/>
+                                <field name="tipo_oferta_preferido" attrs="{'invisible': [('generar_oferta_automatica', '=', False)]}"/>
+                                <field name="requerimientos_validados" widget="boolean_toggle"/>
+                            </group>
+                            <group string="Información de Oferta">
+                                <field name="presupuesto_estimado" widget="monetary"/>
+                                <field name="presupuesto_confirmado" widget="monetary"/>
+                                <field name="fecha_entrega_requerida"/>
+                                <field name="urgencia"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Requerimientos" attrs="{'invisible': [('requerimientos_validados', '=', False)]}">
+                            <field name="requerimientos_detalle" placeholder="Detalle de los requerimientos validados..."/>
+                        </group>
+                        
+                        <group string="Productos Requeridos">
+                            <field name="productos_requeridos_ids" widget="many2many_tags"/>
+                        </group>
+                        
+                        <!-- Lista de ofertas relacionadas -->
+                        <group string="Ofertas Relacionadas" attrs="{'invisible': [('ofertas_count', '=', 0)]}">
+                            <field name="oferta_activa_id" readonly="1" attrs="{'invisible': [('oferta_activa_id', '=', False)]}"/>
+                            <field name="ofertas_ids" readonly="1">
+                                <tree>
+                                    <field name="numero_oferta"/>
+                                    <field name="name"/>
+                                    <field name="tipo_oferta"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="monto_total" widget="monetary"/>
+                                    <field name="fecha_oferta"/>
+                                    <field name="fecha_vencimiento"/>
+                                </tree>
+                            </field>
+                        </group>
+                        
+                        <!-- Botones de acción -->
+                        <div class="oe_button_box" attrs="{'invisible': [('stage_id.is_won', '=', False)]}">
+                            <button name="action_validar_requerimientos" type="object" string="Validar Requerimientos" class="btn-primary" attrs="{'invisible': [('requerimientos_validados', '=', True)]}"/>
+                            <button name="action_invalidar_requerimientos" type="object" string="Invalidar Requerimientos" class="btn-warning" attrs="{'invisible': [('requerimientos_validados', '=', False)]}"/>
+                            <button name="action_crear_oferta_manual" type="object" string="Crear Oferta Manual" class="btn-success" attrs="{'invisible': [('requerimientos_validados', '=', False)]}"/>
+                        </div>
+                    </page>
+                </xpath>
+                
+                <!-- Campos ocultos para cálculos -->
+                <xpath expr="//sheet" position="inside">
+                    <group invisible="1">
+                        <field name="ofertas_count"/>
+                        <field name="tiene_ofertas"/>
+                    </group>
+                </xpath>
+                
+            </field>
+        </record>
+        
+        <!-- Extensión de la vista de lista de CRM Lead -->
+        <record id="view_crm_lead_tree_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.tree.inherit.ofertas</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='expected_revenue']" position="after">
+                    <field name="ofertas_count"/>
+                    <field name="tiene_ofertas" widget="boolean_toggle"/>
+                    <field name="requerimientos_validados" widget="boolean_toggle"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Extensión de la vista de búsqueda de CRM Lead -->
+        <record id="view_crm_lead_search_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.search.inherit.ofertas</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='won']" position="after">
+                    <separator/>
+                    <filter name="con_ofertas" string="Con Ofertas" domain="[('tiene_ofertas', '=', True)]"/>
+                    <filter name="sin_ofertas" string="Sin Ofertas" domain="[('tiene_ofertas', '=', False)]"/>
+                    <filter name="requerimientos_validados" string="Requerimientos Validados" domain="[('requerimientos_validados', '=', True)]"/>
+                    <filter name="auto_generar_ofertas" string="Auto-generar Ofertas" domain="[('generar_oferta_automatica', '=', True)]"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Vista Kanban extendida para CRM Lead -->
+        <record id="view_crm_lead_kanban_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.kanban.inherit.ofertas</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_kanban_tags_section']" position="inside">
+                    <span class="badge badge-pill badge-success" t-if="record.tiene_ofertas.raw_value">
+                        <t t-esc="record.ofertas_count.value"/> Ofertas
+                    </span>
+                    <span class="badge badge-pill badge-info" t-if="record.requerimientos_validados.raw_value">
+                        Req. Validados
+                    </span>
+                    <span class="badge badge-pill badge-warning" t-if="record.generar_oferta_automatica.raw_value">
+                        Auto-Oferta
+                    </span>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Acción para ver ofertas desde oportunidad -->
+        <record id="action_ofertas_from_lead" model="ir.actions.act_window">
+            <field name="name">Ofertas de la Oportunidad</field>
+            <field name="res_model">oferta.oferta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('oportunidad_id', '=', active_id)]</field>
+            <field name="context">{'default_oportunidad_id': active_id, 'default_cliente_id': active_record.partner_id.id if active_record.partner_id else False}</field>
+        </record>
+        
+    </data>
+</odoo>
