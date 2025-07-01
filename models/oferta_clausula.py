@@ -159,6 +159,16 @@ class OfertaClausula(models.Model):
         compute='_compute_es_valida'
     )
     
+    # Relación inversa con ofertas
+    oferta_ids = fields.Many2many(
+        'oferta.oferta',
+        'oferta_oferta_clausula_rel',
+        'clausula_id',
+        'oferta_id',
+        string='Ofertas Relacionadas',
+        compute='_compute_oferta_ids'
+    )
+    
     @api.depends('fecha_inicio', 'fecha_fin')
     def _compute_es_valida(self):
         hoy = fields.Date.today()
@@ -176,6 +186,13 @@ class OfertaClausula(models.Model):
                 ('clausula_ids', 'in', record.id)
             ])
             record.ofertas_count = count
+    
+    def _compute_oferta_ids(self):
+        for record in self:
+            ofertas = self.env['oferta.oferta'].search([
+                ('clausula_ids', 'in', record.id)
+            ])
+            record.oferta_ids = ofertas
     
     @api.constrains('fecha_inicio', 'fecha_fin')
     def _check_fechas_validez(self):

@@ -50,6 +50,15 @@ class Oferta(models.Model):
         tracking=True
     )
     
+    # Campo relacionado para compatibilidad con vistas
+    cliente_id = fields.Many2one(
+        'res.partner',
+        related='partner_id',
+        string='Cliente',
+        store=True,
+        readonly=False
+    )
+    
     lead_id = fields.Many2one(
         'crm.lead',
         string='Oportunidad',
