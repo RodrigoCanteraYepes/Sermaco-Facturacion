@@ -161,15 +161,15 @@
                             <!-- Pestaña de Delegaciones -->
                             <page string="Delegaciones" name="delegaciones">
                                 <field name="delegacion_ids" context="{'default_oferta_id': active_id}">
-                                    <list decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'">
+                                    <list decoration-warning="estado=='pendiente'" decoration-info="estado=='aceptada'" decoration-success="estado=='completada'" decoration-danger="estado=='rechazada'">
                                         <field name="usuario_delegado_id"/>
                                         <field name="tipo_delegacion"/>
                                         <field name="fecha_delegacion"/>
-                                        <field name="fecha_vencimiento"/>
+                                        <field name="fecha_limite"/>
                                         <field name="prioridad"/>
-                                        <field name="state" widget="badge"/>
+                                        <field name="estado" widget="badge"/>
                                         <field name="dias_restantes"/>
-                                        <field name="vencida" invisible="1"/>
+                                        <field name="esta_vencida" invisible="1"/>
                                     </list>
                                 </field>
                             </page>
