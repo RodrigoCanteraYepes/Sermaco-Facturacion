@@ -410,6 +410,29 @@ class Oferta(models.Model):
             body=_('Oferta regresada a borrador por %s') % self.env.user.name
         )
     
+    def action_crear_pedido_venta(self):
+        """Crea un pedido de venta basado en la oferta aceptada"""
+        self.ensure_one()
+        if self.state != 'aceptada':
+            raise UserError(_('Solo se pueden crear pedidos de venta para ofertas aceptadas.'))
+        
+        # Crear orden de venta
+        sale_order = self._crear_orden_venta()
+        self.sale_order_id = sale_order.id
+        
+        self.message_post(
+            body=_('Pedido de venta creado: %s') % sale_order.name
+        )
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Pedido de Venta'),
+            'res_model': 'sale.order',
+            'res_id': sale_order.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+    
     def _crear_orden_venta(self):
         """Crea una orden de venta basada en la oferta"""
         self.ensure_one()
