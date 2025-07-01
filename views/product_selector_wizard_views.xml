@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Vista de Formulario del Wizard de Selección -->
+        <record id="view_product_selector_wizard_form" model="ir.ui.view">
+            <field name="name">product.selector.wizard.form</field>
+            <field name="model">product.selector.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Seleccionar Productos por Categoría">
+                    <sheet>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Filtrado de Productos</strong><br/>
+                            Selecciona una categoría y opcionalmente introduce un término de búsqueda para filtrar los productos.
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="categoria_id" options="{'no_create': True, 'no_edit': True}"/>
+                                <field name="search_term" placeholder="Buscar por nombre, código o tags..."/>
+                            </group>
+                            <group>
+                                <field name="oferta_id" options="{'no_create': True}" attrs="{'required': [('selected_product_ids', '!=', [])]}"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Productos Disponibles" name="productos_disponibles">
+                                <field name="product_ids" readonly="1">
+                                    <tree string="Productos Disponibles" decoration-info="es_alquiler==True" decoration-warning="es_montaje==True" decoration-success="es_porte==True">
+                                        <field name="name"/>
+                                        <field name="default_code"/>
+                                        <field name="categoria_oferta_id"/>
+                                        <field name="list_price" widget="monetary"/>
+                                        <field name="es_alquiler" widget="boolean_toggle"/>
+                                        <field name="precio_alquiler_diario" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
+                                        <field name="precio_alquiler_mensual" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
+                                        <field name="es_montaje" widget="boolean_toggle"/>
+                                        <field name="es_porte" widget="boolean_toggle"/>
+                                        <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}"/>
+                                        <field name="tags_busqueda"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <page string="Productos Seleccionados" name="productos_seleccionados">
+                                <field name="selected_product_ids">
+                                    <tree string="Productos Seleccionados" editable="bottom">
+                                        <field name="name" readonly="1"/>
+                                        <field name="default_code" readonly="1"/>
+                                        <field name="categoria_oferta_id" readonly="1"/>
+                                        <field name="list_price" widget="monetary" readonly="1"/>
+                                        <field name="es_alquiler" readonly="1" widget="boolean_toggle"/>
+                                        <field name="precio_alquiler_diario" attrs="{'invisible': [('es_alquiler', '=', False)]}" readonly="1"/>
+                                        <field name="precio_alquiler_mensual" attrs="{'invisible': [('es_alquiler', '=', False)]}" readonly="1"/>
+                                        <field name="es_montaje" readonly="1" widget="boolean_toggle"/>
+                                        <field name="es_porte" readonly="1" widget="boolean_toggle"/>
+                                        <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                        <button name="action_view_products_by_category" type="object" string="Ver Productos" class="btn-secondary" attrs="{'invisible': [('categoria_id', '=', False)]}"/>
+                        <button name="action_add_products_to_oferta" type="object" string="Agregar a Oferta" class="btn-primary" attrs="{'invisible': ['|', ('selected_product_ids', '=', []), ('oferta_id', '=', False)]}"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Acción del Wizard -->
+        <record id="action_product_selector_wizard" model="ir.actions.act_window">
+            <field name="name">Seleccionar Productos</field>
+            <field name="res_model">product.selector.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_product_selector_wizard_form"/>
+        </record>
+        
+    </data>
+</odoo>

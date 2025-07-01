@@ -191,5 +191,17 @@
         <!-- Menú para ofertas en Ventas -->
         <menuitem id="menu_ofertas_sale" name="Gestión de Ofertas" parent="menu_sale_ofertas" action="action_ofertas_sale" sequence="10"/>
         
+        <!-- Nuevo Menú Principal para Filtrado por Categorías -->
+        <menuitem id="menu_ventas_filtrado" name="Filtrado por Categorías" parent="sale.sale_menu_root" sequence="5"/>
+        
+        <!-- Menú para Filtrado por Categorías -->
+        <menuitem id="menu_ventas_categorias" name="Seleccionar Categoría" parent="menu_ventas_filtrado" action="ventas_filtrado_views.action_ventas_filtrado_categorias" sequence="10"/>
+        
+        <!-- Menú para Productos con Filtros -->
+        <menuitem id="menu_productos_ventas" name="Todos los Productos" parent="menu_ventas_filtrado" action="ventas_filtrado_views.action_productos_ventas_filtrado" sequence="20"/>
+        
+        <!-- Menú para Selector de Productos -->
+        <menuitem id="menu_selector_productos" name="Selector de Productos" parent="menu_ventas_filtrado" action="product_selector_wizard_views.action_product_selector_wizard" sequence="30"/>
+        
     </data>
 </odoo>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Vista de Lista de Categorías -->
+        <record id="view_product_categoria_tree" model="ir.ui.view">
+            <field name="name">product.categoria.tree</field>
+            <field name="model">product.categoria</field>
+            <field name="arch" type="xml">
+                <tree string="Categorías de Productos">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="product_count"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Vista de Formulario de Categorías -->
+        <record id="view_product_categoria_form" model="ir.ui.view">
+            <field name="name">product.categoria.form</field>
+            <field name="model">product.categoria</field>
+            <field name="arch" type="xml">
+                <form string="Categoría de Producto">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_products" type="object" class="oe_stat_button" icon="fa-cube">
+                                <field name="product_count" widget="statinfo" string="Productos"/>
+                            </button>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="color" widget="color"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Descripción">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Productos" name="productos">
+                                <field name="product_ids" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="default_code"/>
+                                        <field name="list_price" widget="monetary"/>
+                                        <field name="es_alquiler" widget="boolean_toggle"/>
+                                        <field name="es_montaje" widget="boolean_toggle"/>
+                                        <field name="es_porte" widget="boolean_toggle"/>
+                                        <field name="active" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Vista Kanban de Categorías para Filtrado -->
+        <record id="view_product_categoria_kanban_filtrado" model="ir.ui.view">
+            <field name="name">product.categoria.kanban.filtrado</field>
+            <field name="model">product.categoria</field>
+            <field name="arch" type="xml">
+                <kanban string="Categorías de Productos" class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="product_count"/>
+                    <field name="color"/>
+                    <field name="description"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <strong><field name="name"/></strong>
+                                        </div>
+                                        <div class="o_secondary">
+                                            <field name="code"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_content">
+                                    <div class="o_kanban_card_manage_pane">
+                                        <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                            <div>
+                                                <span class="badge badge-pill badge-info">
+                                                    <field name="product_count"/> productos
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div t-if="record.description.value" class="o_kanban_card_content">
+                                        <field name="description"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_footer">
+                                    <div class="o_kanban_card_footer_left">
+                                        <button name="action_view_products" type="object" class="btn btn-primary btn-sm">
+                                            Ver Productos
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Acción para Categorías -->
+        <record id="action_product_categoria" model="ir.actions.act_window">
+            <field name="name">Categorías de Productos</field>
+            <field name="res_model">product.categoria</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡Crea tu primera categoría de producto!
+                </p>
+                <p>
+                    Las categorías te permiten organizar los productos por tipo:
+                    Precio, Alquiler, Montaje, Portes, Otros Conceptos.
+                </p>
+            </field>
+        </record>
+        
+        <!-- Acción para Filtrado por Categorías -->
+        <record id="action_product_categoria_filtrado" model="ir.actions.act_window">
+            <field name="name">Seleccionar Categoría</field>
+            <field name="res_model">product.categoria</field>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="view_product_categoria_kanban_filtrado"/>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Selecciona una categoría para filtrar productos
+                </p>
+                <p>
+                    Haz clic en una categoría para ver los productos disponibles:
+                    Precio, Alquiler, Montaje, Portes, Otros Conceptos.
+                </p>
+            </field>
+        </record>
+        
+        <!-- Vista de Productos Filtrados por Categoría -->
+        <record id="view_product_template_filtrado_tree" model="ir.ui.view">
+            <field name="name">product.template.filtrado.tree</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <tree string="Productos por Categoría" editable="bottom" create="false" delete="false">
+                    <field name="name"/>
+                    <field name="default_code"/>
+                    <field name="categoria_oferta_id" readonly="1"/>
+                    <field name="list_price" widget="monetary"/>
+                    <field name="es_alquiler" readonly="1" widget="boolean_toggle"/>
+                    <field name="precio_alquiler_diario" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
+                    <field name="precio_alquiler_mensual" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
+                    <field name="es_montaje" readonly="1" widget="boolean_toggle"/>
+                    <field name="es_porte" readonly="1" widget="boolean_toggle"/>
+                    <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}"/>
+                    <field name="tags_busqueda"/>
+                    <button name="action_add_to_oferta" type="object" string="Agregar a Oferta" class="btn-primary" icon="fa-plus"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Acción para Productos Filtrados -->
+        <record id="action_product_template_filtrado" model="ir.actions.act_window">
+            <field name="name">Productos Filtrados</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_product_template_filtrado_tree"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        
+    </data>
+</odoo>

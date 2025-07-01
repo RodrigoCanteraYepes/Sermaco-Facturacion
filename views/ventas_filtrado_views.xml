@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Vista Principal de Ventas con Filtrado por Categorías -->
+        <record id="view_ventas_categoria_kanban" model="ir.ui.view">
+            <field name="name">ventas.categoria.kanban</field>
+            <field name="model">product.categoria</field>
+            <field name="arch" type="xml">
+                <kanban string="Módulo de Ventas - Filtrado por Categorías" class="o_kanban_mobile o_kanban_dashboard">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="product_count"/>
+                    <field name="color"/>
+                    <field name="description"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click o_kanban_dashboard_card">
+                                <div class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary text-center">
+                                            <h3><strong><field name="name"/></strong></h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_content text-center">
+                                    <div class="o_kanban_primary_bottom">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <span class="badge badge-pill badge-info" style="font-size: 14px; padding: 8px 16px;">
+                                                    <i class="fa fa-cube"/> <field name="product_count"/> productos disponibles
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2" t-if="record.description.value">
+                                            <div class="col-12">
+                                                <small class="text-muted"><field name="description"/></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_footer text-center">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button name="action_view_products" type="object" class="btn btn-primary btn-sm btn-block">
+                                                <i class="fa fa-search"/> Explorar
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button name="%(action_product_selector_wizard)d" type="action" class="btn btn-success btn-sm btn-block" context="{'default_categoria_id': active_id}">
+                                                <i class="fa fa-plus"/> Seleccionar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Vista de Lista Mejorada para Productos con Filtros -->
+        <record id="view_product_template_ventas_tree" model="ir.ui.view">
+            <field name="name">product.template.ventas.tree</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <tree string="Productos para Ventas" decoration-info="es_alquiler==True" decoration-warning="es_montaje==True" decoration-success="es_porte==True" decoration-muted="active==False">
+                    <field name="name"/>
+                    <field name="default_code"/>
+                    <field name="categoria_oferta_id"/>
+                    <field name="list_price" widget="monetary"/>
+                    <field name="es_alquiler" widget="boolean_toggle"/>
+                    <field name="precio_alquiler_diario" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
+                    <field name="precio_alquiler_mensual" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
+                    <field name="es_montaje" widget="boolean_toggle"/>
+                    <field name="es_porte" widget="boolean_toggle"/>
+                    <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}"/>
+                    <field name="distancia_minima" attrs="{'invisible': [('es_porte', '=', False)]}"/>
+                    <field name="tags_busqueda"/>
+                    <field name="active" widget="boolean_toggle"/>
+                    <button name="action_add_to_oferta_wizard" type="object" string="Agregar a Oferta" class="btn-primary" icon="fa-plus"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Vista Kanban para Productos con Información Detallada -->
+        <record id="view_product_template_ventas_kanban" model="ir.ui.view">
+            <field name="name">product.template.ventas.kanban</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <kanban string="Productos" class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="default_code"/>
+                    <field name="categoria_oferta_id"/>
+                    <field name="list_price"/>
+                    <field name="es_alquiler"/>
+                    <field name="precio_alquiler_diario"/>
+                    <field name="precio_alquiler_mensual"/>
+                    <field name="es_montaje"/>
+                    <field name="es_porte"/>
+                    <field name="precio_porte_km"/>
+                    <field name="tags_busqueda"/>
+                    <field name="active"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click" t-att-class="record.active.raw_value ? '' : 'o_kanban_card_disabled'">
+                                <div class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <strong><field name="name"/></strong>
+                                        </div>
+                                        <div class="o_secondary" t-if="record.default_code.value">
+                                            Código: <field name="default_code"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_content">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span class="badge badge-secondary">
+                                                <field name="categoria_oferta_id"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <strong>Precio: </strong><field name="list_price" widget="monetary"/>
+                                        </div>
+                                        <div class="col-6" t-if="record.es_alquiler.raw_value">
+                                            <span class="badge badge-info">Alquiler</span>
+                                        </div>
+                                    </div>
+                                    <div class="row" t-if="record.es_alquiler.raw_value and record.precio_alquiler_diario.value">
+                                        <div class="col-12">
+                                            <small>Diario: <field name="precio_alquiler_diario" widget="monetary"/></small>
+                                        </div>
+                                    </div>
+                                    <div class="row" t-if="record.es_alquiler.raw_value and record.precio_alquiler_mensual.value">
+                                        <div class="col-12">
+                                            <small>Mensual: <field name="precio_alquiler_mensual" widget="monetary"/></small>
+                                        </div>
+                                    </div>
+                                    <div class="row" t-if="record.es_porte.raw_value and record.precio_porte_km.value">
+                                        <div class="col-12">
+                                            <small>Por Km: <field name="precio_porte_km" widget="monetary"/></small>
+                                        </div>
+                                    </div>
+                                    <div class="row" t-if="record.tags_busqueda.value">
+                                        <div class="col-12">
+                                            <small class="text-muted">Tags: <field name="tags_busqueda"/></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_footer">
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <button name="action_add_to_oferta_wizard" type="object" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-plus"/> Agregar a Oferta
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Filtros de Búsqueda para Productos -->
+        <record id="view_product_template_ventas_search" model="ir.ui.view">
+            <field name="name">product.template.ventas.search</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Productos">
+                    <field name="name" string="Producto" filter_domain="['|', '|', '|', ('name', 'ilike', self), ('default_code', 'ilike', self), ('tags_busqueda', 'ilike', self), ('description', 'ilike', self)]"/>
+                    <field name="categoria_oferta_id"/>
+                    <field name="default_code"/>
+                    <field name="tags_busqueda"/>
+                    
+                    <separator/>
+                    <filter string="Productos de Alquiler" name="filter_alquiler" domain="[('es_alquiler', '=', True)]"/>
+                    <filter string="Servicios de Montaje" name="filter_montaje" domain="[('es_montaje', '=', True)]"/>
+                    <filter string="Servicios de Porte" name="filter_porte" domain="[('es_porte', '=', True)]"/>
+                    <separator/>
+                    <filter string="Activos" name="filter_active" domain="[('active', '=', True)]"/>
+                    <filter string="Inactivos" name="filter_inactive" domain="[('active', '=', False)]"/>
+                    
+                    <group expand="0" string="Agrupar Por">
+                        <filter string="Categoría" name="group_categoria" context="{'group_by': 'categoria_oferta_id'}"/>
+                        <filter string="Tipo de Producto" name="group_tipo" context="{'group_by': 'detailed_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Acción Principal para Ventas con Filtrado -->
+        <record id="action_ventas_filtrado_categorias" model="ir.actions.act_window">
+            <field name="name">Módulo de Ventas - Filtrado por Categorías</field>
+            <field name="res_model">product.categoria</field>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="view_ventas_categoria_kanban"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡Bienvenido al Módulo de Ventas!
+                </p>
+                <p>
+                    Selecciona una categoría para filtrar y explorar productos:
+                </p>
+                <ul>
+                    <li><strong>Precio:</strong> Productos con precio fijo de venta</li>
+                    <li><strong>Alquiler:</strong> Productos disponibles para alquiler</li>
+                    <li><strong>Montaje:</strong> Servicios de montaje e instalación</li>
+                    <li><strong>Portes:</strong> Servicios de transporte y entrega</li>
+                    <li><strong>Otros Conceptos:</strong> Servicios adicionales</li>
+                </ul>
+            </field>
+        </record>
+        
+        <!-- Acción para Productos con Filtros Avanzados -->
+        <record id="action_productos_ventas_filtrado" model="ir.actions.act_window">
+            <field name="name">Productos para Ventas</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_product_template_ventas_kanban')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_product_template_ventas_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': False})
+            ]"/>
+            <field name="search_view_id" ref="view_product_template_ventas_search"/>
+            <field name="context">{'search_default_filter_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡No hay productos configurados!
+                </p>
+                <p>
+                    Crea productos y asígnalos a categorías para poder filtrarlos en el módulo de ventas.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
