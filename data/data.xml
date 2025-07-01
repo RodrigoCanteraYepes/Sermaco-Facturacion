@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Datos iniciales del módulo de gestión de ofertas -->
     <data noupdate="1">
         
         <!-- Cláusulas Generales Predeterminadas -->
