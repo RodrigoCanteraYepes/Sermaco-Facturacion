@@ -271,6 +271,36 @@ class OfertaClausula(models.Model):
             }
         }
     
+    def action_activar(self):
+        """Activa la cláusula"""
+        self.ensure_one()
+        self.activa = True
+        estado = 'activada'
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Estado Actualizado'),
+                'message': _('Cláusula %s') % estado,
+                'type': 'success',
+            }
+        }
+    
+    def action_desactivar(self):
+        """Desactiva la cláusula"""
+        self.ensure_one()
+        self.activa = False
+        estado = 'desactivada'
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Estado Actualizado'),
+                'message': _('Cláusula %s') % estado,
+                'type': 'success',
+            }
+        }
+    
     @api.model
     def get_clausulas_aplicables(self, oferta):
         """Obtiene las cláusulas aplicables para una oferta específica"""

@@ -247,17 +247,46 @@ class OfertaCapitulo(models.Model):
         }
     
     def action_ver_tarifas(self):
-        """Acción para ver las tarifas de los productos del capítulo"""
+        """Muestra las tarifas relacionadas con los productos del capítulo"""
         self.ensure_one()
+        
+        tarifas = self.env['oferta.tarifa'].search([
+            ('oferta_id', '=', self.oferta_id.id),
+            ('producto_id', 'in', self.producto_ids.ids)
+        ])
+        
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Tarifas del Capítulo: %s') % self.nombre,
+            'name': _('Tarifas del Capítulo'),
             'res_model': 'oferta.tarifa',
             'view_mode': 'tree,form',
-            'domain': [
-                ('oferta_id', '=', self.oferta_id.id),
-                ('producto_id', 'in', self.producto_ids.ids)
-            ],
+            'domain': [('id', 'in', tarifas.ids)],
+            'context': {
+                'default_oferta_id': self.oferta_id.id,
+                'search_default_capitulo': self.id,
+            }
+        }
+    
+    def action_ver_clausulas(self):
+        """Muestra las cláusulas relacionadas con el capítulo"""
+        self.ensure_one()
+        
+        # Buscar cláusulas específicas del capítulo o generales de la oferta
+        clausulas = self.env['oferta.clausula'].search([
+            '|',
+            ('capitulo_ids', 'in', [self.id]),
+            ('oferta_ids', 'in', [self.oferta_id.id])
+        ])
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Cláusulas del Capítulo'),
+            'res_model': 'oferta.clausula',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', clausulas.ids)],
+            'context': {
+                'default_capitulo_ids': [(6, 0, [self.id])],
+            }
         }
     
     @api.model

@@ -232,7 +232,7 @@ class CrmLead(models.Model):
         )
     
     def action_configurar_productos_requeridos(self):
-        """Acción para configurar productos requeridos"""
+        """Abre wizard para configurar productos requeridos"""
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
@@ -242,8 +242,38 @@ class CrmLead(models.Model):
             'target': 'new',
             'context': {
                 'default_lead_id': self.id,
-                'default_producto_ids': [(6, 0, self.productos_requeridos_ids.ids)],
+                'default_productos_actuales': [(6, 0, self.productos_requeridos_ids.ids)]
             }
+        }
+    
+    def action_crear_oferta_manual(self):
+        """Crea una oferta manual sin validaciones automáticas"""
+        self.ensure_one()
+        
+        # Crear oferta básica
+        oferta_vals = {
+            'name': f'Oferta Manual - {self.name}',
+            'partner_id': self.partner_id.id,
+            'lead_id': self.id,
+            'user_id': self.user_id.id or self.env.user.id,
+            'fecha_oferta': fields.Date.today(),
+            'tipo_oferta': 'venta_directa',
+            'observaciones': f'Oferta creada manualmente desde oportunidad: {self.name}',
+        }
+        
+        oferta = self.env['oferta.oferta'].create(oferta_vals)
+        
+        self.message_post(
+            body=_('Oferta manual creada: %s') % oferta.name
+        )
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Oferta Manual'),
+            'res_model': 'oferta.oferta',
+            'res_id': oferta.id,
+            'view_mode': 'form',
+            'target': 'current',
         }
     
     @api.model

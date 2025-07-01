@@ -433,6 +433,36 @@ class Oferta(models.Model):
             'target': 'current',
         }
     
+    def action_view_sale_order(self):
+        """Abre la vista del pedido de venta relacionado"""
+        self.ensure_one()
+        if not self.sale_order_id:
+            raise UserError(_('Esta oferta no tiene un pedido de venta asociado.'))
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Pedido de Venta'),
+            'res_model': 'sale.order',
+            'res_id': self.sale_order_id.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+    
+    def action_view_opportunity(self):
+        """Abre la vista de la oportunidad relacionada"""
+        self.ensure_one()
+        if not self.lead_id:
+            raise UserError(_('Esta oferta no tiene una oportunidad asociada.'))
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Oportunidad'),
+            'res_model': 'crm.lead',
+            'res_id': self.lead_id.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+    
     def _crear_orden_venta(self):
         """Crea una orden de venta basada en la oferta"""
         self.ensure_one()

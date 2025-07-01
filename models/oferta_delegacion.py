@@ -409,6 +409,27 @@ class OfertaDelegacion(models.Model):
             }
         }
     
+    # Alias para compatibilidad con vistas
+    def action_aceptar(self):
+        """Alias para action_aceptar_delegacion"""
+        return self.action_aceptar_delegacion()
+    
+    def action_completar(self):
+        """Alias para action_completar_delegacion"""
+        return self.action_completar_delegacion()
+    
+    def action_rechazar(self):
+        """Alias para action_rechazar_delegacion"""
+        return self.action_rechazar_delegacion()
+    
+    def action_cancelar(self):
+        """Alias para action_cancelar_delegacion"""
+        return self.action_cancelar_delegacion()
+    
+    def action_reasignar(self):
+        """Alias para action_reasignar_delegacion"""
+        return self.action_reasignar_delegacion()
+    
     @api.model
     def _cron_notificar_vencimientos(self):
         """Cron job para notificar delegaciones próximas a vencer"""
