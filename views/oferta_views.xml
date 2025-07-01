@@ -170,7 +170,7 @@
                                         <field name="state" widget="badge"/>
                                         <field name="dias_restantes"/>
                                         <field name="vencida" invisible="1"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             
