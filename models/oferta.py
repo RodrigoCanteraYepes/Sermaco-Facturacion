@@ -185,6 +185,16 @@ class Oferta(models.Model):
         compute='_compute_clausulas_count'
     )
     
+    delegaciones_count = fields.Integer(
+        string='Número de Delegaciones',
+        compute='_compute_delegaciones_count'
+    )
+    
+    tarifas_count = fields.Integer(
+        string='Número de Tarifas',
+        compute='_compute_tarifas_count'
+    )
+    
     delegacion_obligatoria = fields.Boolean(
         string='Delegación Obligatoria',
         compute='_compute_delegacion_obligatoria'
@@ -207,6 +217,15 @@ class Oferta(models.Model):
         related='integridad_completa',
         string='Integridad OK',
         store=True
+    )
+    
+    # Campo relacionado para compatibilidad con vistas
+    pedido_venta_id = fields.Many2one(
+        'sale.order',
+        related='sale_order_id',
+        string='Pedido de Venta',
+        store=True,
+        readonly=False
     )
     
     # Campos de validación
@@ -252,6 +271,16 @@ class Oferta(models.Model):
     def _compute_clausulas_count(self):
         for record in self:
             record.clausulas_count = len(record.clausula_ids)
+    
+    @api.depends('delegacion_ids')
+    def _compute_delegaciones_count(self):
+        for record in self:
+            record.delegaciones_count = len(record.delegacion_ids)
+    
+    @api.depends('tarifa_ids')
+    def _compute_tarifas_count(self):
+        for record in self:
+            record.tarifas_count = len(record.tarifa_ids)
     
     @api.depends('monto_total')
     def _compute_delegacion_obligatoria(self):
