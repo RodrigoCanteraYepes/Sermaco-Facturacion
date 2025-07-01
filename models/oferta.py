@@ -65,6 +65,15 @@ class Oferta(models.Model):
         tracking=True
     )
     
+    # Campo relacionado para compatibilidad con vistas
+    oportunidad_id = fields.Many2one(
+        'crm.lead',
+        related='lead_id',
+        string='Oportunidad',
+        store=True,
+        readonly=False
+    )
+    
     sale_order_id = fields.Many2one(
         'sale.order',
         string='Orden de Venta',
@@ -77,6 +86,15 @@ class Oferta(models.Model):
         default=lambda self: self.env.user,
         required=True,
         tracking=True
+    )
+    
+    # Campo relacionado para compatibilidad con vistas
+    tecnico_comercial_id = fields.Many2one(
+        'res.users',
+        related='user_id',
+        string='Técnico Comercial',
+        store=True,
+        readonly=False
     )
     
     # Fechas
