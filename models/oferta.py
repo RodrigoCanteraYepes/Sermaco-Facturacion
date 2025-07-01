@@ -190,6 +190,13 @@ class Oferta(models.Model):
         compute='_compute_delegacion_obligatoria'
     )
     
+    # Campo relacionado para compatibilidad con vistas
+    delegacion_requerida = fields.Boolean(
+        related='delegacion_obligatoria',
+        string='Delegación Requerida',
+        store=True
+    )
+    
     integridad_completa = fields.Boolean(
         string='Integridad Completa',
         compute='_compute_integridad_completa'
