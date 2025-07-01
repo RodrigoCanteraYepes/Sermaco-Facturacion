@@ -177,6 +177,13 @@ class Oferta(models.Model):
         compute='_compute_integridad_completa'
     )
     
+    # Campo relacionado para compatibilidad con vistas
+    integridad_ok = fields.Boolean(
+        related='integridad_completa',
+        string='Integridad OK',
+        store=True
+    )
+    
     # Campos de validación
     productos_sin_precio = fields.Boolean(
         string='Productos sin Precio',
