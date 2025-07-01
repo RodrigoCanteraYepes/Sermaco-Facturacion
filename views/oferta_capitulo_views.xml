@@ -7,16 +7,16 @@
             <field name="name">oferta.capitulo.tree</field>
             <field name="model">oferta.capitulo</field>
             <field name="arch" type="xml">
-                <list string="Capítulos" editable="bottom" decoration-muted="not active">
+                <list string="Capítulos" editable="bottom" decoration-muted="not activo">
                     <field name="sequence" widget="handle"/>
-                    <field name="name"/>
+                    <field name="nombre"/>
                     <field name="descripcion"/>
                     <field name="oferta_id" readonly="1"/>
                     <field name="productos_count"/>
                     <field name="clausulas_count"/>
                     <field name="subtotal" widget="monetary" sum="Total"/>
                     <field name="currency_id" invisible="1"/>
-                    <field name="active" widget="boolean_toggle"/>
+                    <field name="activo" widget="boolean_toggle"/>
                     <field name="tiene_productos" invisible="1"/>
                     <field name="productos_sin_precio" invisible="1"/>
                 </list>
@@ -48,7 +48,7 @@
                         
                         <div class="oe_title">
                             <h1>
-                                <field name="name" placeholder="Nombre del capítulo..."/>
+                                <field name="nombre" placeholder="Nombre del capítulo..."/>
                             </h1>
                         </div>
                         
@@ -65,7 +65,7 @@
                             <group>
                                 <field name="oferta_id" readonly="1"/>
                                 <field name="sequence"/>
-                                <field name="active" widget="boolean_toggle"/>
+                                <field name="activo" widget="boolean_toggle"/>
                             </group>
                             <group>
                                 <field name="subtotal" widget="monetary"/>
@@ -128,19 +128,19 @@
             <field name="model">oferta.capitulo</field>
             <field name="arch" type="xml">
                 <search string="Buscar Capítulos">
-                    <field name="name"/>
+                    <field name="nombre"/>
                     <field name="descripcion"/>
                     <field name="oferta_id"/>
                     <separator/>
-                    <filter name="activos" string="Activos" domain="[('active', '=', True)]"/>
-                    <filter name="inactivos" string="Inactivos" domain="[('active', '=', False)]"/>
+                    <filter name="activos" string="Activos" domain="[('activo', '=', True)]"/>
+                    <filter name="inactivos" string="Inactivos" domain="[('activo', '=', False)]"/>
                     <separator/>
                     <filter name="con_productos" string="Con Productos" domain="[('tiene_productos', '=', True)]"/>
                     <filter name="sin_productos" string="Sin Productos" domain="[('tiene_productos', '=', False)]"/>
                     <filter name="productos_sin_precio" string="Productos Sin Precio" domain="[('productos_sin_precio', '=', True)]"/>
                     <group expand="0" string="Agrupar Por">
                         <filter name="group_oferta" string="Oferta" context="{'group_by': 'oferta_id'}"/>
-                        <filter name="group_active" string="Estado" context="{'group_by': 'active'}"/>
+                        <filter name="group_active" string="Estado" context="{'group_by': 'activo'}"/>
                     </group>
                 </search>
             </field>
@@ -152,22 +152,22 @@
             <field name="model">oferta.capitulo</field>
             <field name="arch" type="xml">
                 <kanban class="o_kanban_small_column">
-                    <field name="name"/>
+                    <field name="nombre"/>
                     <field name="descripcion"/>
                     <field name="productos_count"/>
                     <field name="clausulas_count"/>
                     <field name="subtotal"/>
                     <field name="currency_id"/>
-                    <field name="active"/>
+                    <field name="activo"/>
                     <field name="tiene_productos"/>
                     <field name="productos_sin_precio"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_card oe_kanban_global_click" t-attf-class="#{!record.active.raw_value ? 'o_kanban_color_2' : ''}">
+                            <div class="oe_kanban_card oe_kanban_global_click" t-attf-class="#{!record.activo.raw_value ? 'o_kanban_color_2' : ''}">
                                 <div class="o_kanban_record_top">
                                     <div class="o_kanban_record_headings">
                                         <strong class="o_kanban_record_title">
-                                            <field name="name"/>
+                                            <field name="nombre"/>
                                         </strong>
                                     </div>
                                     <div class="o_kanban_manage_button_section">
@@ -178,8 +178,8 @@
                                 </div>
                                 <div class="o_kanban_record_body">
                                     <div class="o_kanban_tags_section">
-                                        <span class="badge badge-pill badge-success" t-if="record.active.raw_value">Activo</span>
-                                        <span class="badge badge-pill badge-secondary" t-if="!record.active.raw_value">Inactivo</span>
+                                        <span class="badge badge-pill badge-success" t-if="record.activo.raw_value">Activo</span>
+                                        <span class="badge badge-pill badge-secondary" t-if="!record.activo.raw_value">Inactivo</span>
                                         <span class="badge badge-pill badge-warning" t-if="record.productos_sin_precio.raw_value">Sin Precios</span>
                                         <span class="badge badge-pill badge-info" t-if="!record.tiene_productos.raw_value">Sin Productos</span>
                                     </div>

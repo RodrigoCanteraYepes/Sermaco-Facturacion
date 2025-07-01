@@ -113,13 +113,13 @@
                                 <field name="capitulo_ids" context="{'default_oferta_id': active_id}">
                                     <list editable="bottom">
                                         <field name="sequence" widget="handle"/>
-                                        <field name="name"/>
+                                        <field name="nombre"/>
                                         <field name="descripcion"/>
                                         <field name="productos_count"/>
                                         <field name="clausulas_count"/>
                                         <field name="subtotal" widget="monetary"/>
                                         <field name="currency_id" invisible="1"/>
-                                        <field name="active" widget="boolean_toggle"/>
+                                        <field name="activo" widget="boolean_toggle"/>
                                     </list>
                                 </field>
                                 <div class="alert alert-info" role="alert" attrs="{'invisible': [('tipo_oferta', '!=', 'venta_directa')]}">
@@ -133,7 +133,7 @@
                                     <list editable="bottom">
                                         <field name="producto_id"/>
                                         <field name="cantidad"/>
-                                        <field name="precio_unitario" widget="monetary"/>
+                                        <field name="precio" widget="monetary"/>
                                         <field name="descuento_porcentaje" widget="percentage"/>
                                         <field name="precio_con_descuento" widget="monetary"/>
                                         <field name="total_con_descuento" widget="monetary"/>

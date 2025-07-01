@@ -10,7 +10,7 @@
                 <list string="Tarifas" editable="bottom" decoration-muted="not active" decoration-warning="not vigente">
                     <field name="producto_id"/>
                     <field name="cantidad"/>
-                    <field name="precio_unitario" widget="monetary"/>
+                    <field name="precio" widget="monetary"/>
                     <field name="descuento_porcentaje" widget="percentage"/>
                     <field name="descuento_fijo" widget="monetary"/>
                     <field name="precio_con_descuento" widget="monetary"/>
@@ -19,7 +19,7 @@
                     <field name="fecha_fin"/>
                     <field name="tipo_tarifa"/>
                     <field name="currency_id" invisible="1"/>
-                    <field name="active" widget="boolean_toggle"/>
+                    <field name="activa" widget="boolean_toggle"/>
                     <field name="vigente" invisible="1"/>
                 </list>
             </field>
@@ -49,7 +49,7 @@
                             <strong>¡Atención!</strong> Esta tarifa no está vigente según las fechas configuradas.
                         </div>
                         
-                        <div class="alert alert-info" role="alert" attrs="{'invisible': [('active', '=', True)]}">
+                        <div class="alert alert-info" role="alert" attrs="{'invisible': [('activa', '=', True)]}">
                             <strong>Información:</strong> Esta tarifa está desactivada.
                         </div>
                         
@@ -59,7 +59,7 @@
                                 <field name="capitulo_id" readonly="1" attrs="{'invisible': [('capitulo_id', '=', False)]}"/>
                                 <field name="unidad_medida_id"/>
                                 <field name="tipo_tarifa"/>
-                                <field name="active" widget="boolean_toggle"/>
+                                <field name="activa" widget="boolean_toggle"/>
                             </group>
                             <group string="Vigencia">
                                 <field name="fecha_inicio"/>
@@ -73,7 +73,7 @@
                             <group string="Cantidad y Precios">
                                 <field name="cantidad"/>
                                 <field name="precio_lista" widget="monetary" readonly="1"/>
-                                <field name="precio_unitario" widget="monetary"/>
+                                <field name="precio" widget="monetary"/>
                                 <field name="precio_total" widget="monetary" readonly="1"/>
                                 <field name="currency_id" groups="base.group_multi_currency"/>
                             </group>
@@ -117,8 +117,8 @@
                     <field name="oferta_id"/>
                     <field name="capitulo_id"/>
                     <separator/>
-                    <filter name="activas" string="Activas" domain="[('active', '=', True)]"/>
-                    <filter name="inactivas" string="Inactivas" domain="[('active', '=', False)]"/>
+                    <filter name="activas" string="Activas" domain="[('activa', '=', True)]"/>
+                    <filter name="inactivas" string="Inactivas" domain="[('activa', '=', False)]"/>
                     <separator/>
                     <filter name="vigentes" string="Vigentes" domain="[('vigente', '=', True)]"/>
                     <filter name="no_vigentes" string="No Vigentes" domain="[('vigente', '=', False)]"/>
@@ -148,17 +148,17 @@
                 <kanban class="o_kanban_small_column">
                     <field name="producto_id"/>
                     <field name="cantidad"/>
-                    <field name="precio_unitario"/>
+                    <field name="precio"/>
                     <field name="total_con_descuento"/>
                     <field name="currency_id"/>
-                    <field name="active"/>
+                    <field name="activa"/>
                     <field name="vigente"/>
                     <field name="margen_porcentaje"/>
                     <field name="descuento_porcentaje"/>
                     <field name="tipo_tarifa"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_card oe_kanban_global_click" t-attf-class="#{!record.active.raw_value ? 'o_kanban_color_2' : ''}">
+                            <div class="oe_kanban_card oe_kanban_global_click" t-attf-class="#{!record.activa.raw_value ? 'o_kanban_color_2' : ''}">
                                 <div class="o_kanban_record_top">
                                     <div class="o_kanban_record_headings">
                                         <strong class="o_kanban_record_title">
@@ -174,16 +174,16 @@
                                 <div class="o_kanban_record_body">
                                     <div class="o_kanban_tags_section">
                                         <span class="badge badge-pill badge-primary" t-esc="record.tipo_tarifa.value"/>
-                                        <span class="badge badge-pill badge-success" t-if="record.active.raw_value and record.vigente.raw_value">Vigente</span>
-                                        <span class="badge badge-pill badge-secondary" t-if="!record.active.raw_value">Inactiva</span>
-                                        <span class="badge badge-pill badge-warning" t-if="record.active.raw_value and !record.vigente.raw_value">No Vigente</span>
+                                        <span class="badge badge-pill badge-success" t-if="record.activa.raw_value and record.vigente.raw_value">Vigente</span>
+                                        <span class="badge badge-pill badge-secondary" t-if="!record.activa.raw_value">Inactiva</span>
+                                        <span class="badge badge-pill badge-warning" t-if="record.activa.raw_value and !record.vigente.raw_value">No Vigente</span>
                                         <span class="badge badge-pill badge-info" t-if="record.descuento_porcentaje.raw_value > 0">Con Descuento</span>
                                     </div>
                                     <div>
                                         <i class="fa fa-cubes" title="Cantidad"/> <t t-esc="record.cantidad.value"/> unidades
                                     </div>
                                     <div>
-                                        <i class="fa fa-money" title="Precio Unitario"/> <field name="precio_unitario" widget="monetary"/>
+                                        <i class="fa fa-money" title="Precio Unitario"/> <field name="precio" widget="monetary"/>
                                     </div>
                                     <div>
                                         <i class="fa fa-calculator" title="Total"/> <field name="total_con_descuento" widget="monetary"/>
