@@ -140,7 +140,7 @@
                                         <field name="fecha_inicio"/>
                                         <field name="fecha_fin"/>
                                         <field name="currency_id" invisible="1"/>
-                                        <field name="active" widget="boolean_toggle"/>
+                                        <field name="activa" widget="boolean_toggle"/>
                                     </list>
                                 </field>
                             </page>
