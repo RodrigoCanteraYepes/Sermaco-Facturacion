@@ -7,13 +7,13 @@
             <field name="name">product.categoria.tree</field>
             <field name="model">product.categoria</field>
             <field name="arch" type="xml">
-                <tree string="Categorías de Productos">
+                <list string="Categorías de Productos" decoration-muted="not active">
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="code"/>
                     <field name="product_count"/>
                     <field name="active" widget="boolean_toggle"/>
-                </tree>
+                </list>
             </field>
         </record>
         

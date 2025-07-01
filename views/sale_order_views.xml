@@ -53,27 +53,27 @@
                         <!-- Delegaciones de la oferta -->
                         <group string="Delegaciones de la Oferta">
                             <field name="delegaciones_oferta_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="usuario_delegado_id"/>
                                     <field name="tipo_delegacion"/>
                                     <field name="fecha_delegacion"/>
                                     <field name="fecha_vencimiento"/>
                                     <field name="estado" widget="badge"/>
                                     <field name="prioridad" widget="priority"/>
-                                </tree>
+                                </list>
                             </field>
                         </group>
                         
                         <!-- Cláusulas de la oferta -->
                         <group string="Cláusulas de la Oferta">
                             <field name="clausulas_oferta_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="codigo"/>
                                     <field name="nombre"/>
                                     <field name="tipo"/>
                                     <field name="activa" widget="boolean_toggle"/>
                                     <field name="contenido" widget="text"/>
-                                </tree>
+                                </list>
                             </field>
                         </group>
                     </page>

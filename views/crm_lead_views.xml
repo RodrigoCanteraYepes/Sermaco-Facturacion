@@ -50,7 +50,7 @@
                         <group string="Ofertas Relacionadas" attrs="{'invisible': [('ofertas_count', '=', 0)]}">
                             <field name="oferta_activa_id" readonly="1" attrs="{'invisible': [('oferta_activa_id', '=', False)]}"/>
                             <field name="ofertas_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="numero_oferta"/>
                                     <field name="name"/>
                                     <field name="tipo_oferta"/>
@@ -58,7 +58,7 @@
                                     <field name="monto_total" widget="monetary"/>
                                     <field name="fecha_oferta"/>
                                     <field name="fecha_vencimiento"/>
-                                </tree>
+                                </list>
                             </field>
                         </group>
                         

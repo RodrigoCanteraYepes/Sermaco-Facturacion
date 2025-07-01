@@ -7,7 +7,7 @@
             <field name="name">oferta.tarifa.tree</field>
             <field name="model">oferta.tarifa</field>
             <field name="arch" type="xml">
-                <tree string="Tarifas" editable="bottom" decoration-muted="not active" decoration-warning="not vigente">
+                <list string="Tarifas" editable="bottom" decoration-muted="not active" decoration-warning="not vigente">
                     <field name="producto_id"/>
                     <field name="cantidad"/>
                     <field name="precio_unitario" widget="monetary"/>
@@ -21,7 +21,7 @@
                     <field name="currency_id" invisible="1"/>
                     <field name="active" widget="boolean_toggle"/>
                     <field name="vigente" invisible="1"/>
-                </tree>
+                </list>
             </field>
         </record>
         

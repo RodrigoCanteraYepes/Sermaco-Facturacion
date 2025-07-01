@@ -27,7 +27,7 @@
                         <notebook>
                             <page string="Productos Disponibles" name="productos_disponibles">
                                 <field name="product_ids" readonly="1">
-                                    <tree string="Productos Disponibles" decoration-info="es_alquiler==True" decoration-warning="es_montaje==True" decoration-success="es_porte==True">
+                                    <list string="Productos Disponibles" decoration-info="es_alquiler==True" decoration-warning="es_montaje==True" decoration-success="es_porte==True">
                                         <field name="name"/>
                                         <field name="default_code"/>
                                         <field name="categoria_oferta_id"/>
@@ -39,13 +39,13 @@
                                         <field name="es_porte" widget="boolean_toggle"/>
                                         <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}"/>
                                         <field name="tags_busqueda"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             
                             <page string="Productos Seleccionados" name="productos_seleccionados">
                                 <field name="selected_product_ids">
-                                    <tree string="Productos Seleccionados" editable="bottom">
+                                    <list string="Productos Seleccionados" editable="bottom">
                                         <field name="name" readonly="1"/>
                                         <field name="default_code" readonly="1"/>
                                         <field name="categoria_oferta_id" readonly="1"/>
@@ -56,7 +56,7 @@
                                         <field name="es_montaje" readonly="1" widget="boolean_toggle"/>
                                         <field name="es_porte" readonly="1" widget="boolean_toggle"/>
                                         <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}" readonly="1"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>

@@ -65,7 +65,7 @@
             <field name="name">product.template.ventas.tree</field>
             <field name="model">product.template</field>
             <field name="arch" type="xml">
-                <tree string="Productos para Ventas" decoration-info="es_alquiler==True" decoration-warning="es_montaje==True" decoration-success="es_porte==True" decoration-muted="active==False">
+                <list string="Productos para Ventas" decoration-info="es_alquiler==True" decoration-warning="es_montaje==True" decoration-success="es_porte==True" decoration-muted="active==False">
                     <field name="name"/>
                     <field name="default_code"/>
                     <field name="categoria_oferta_id"/>
@@ -80,7 +80,7 @@
                     <field name="tags_busqueda"/>
                     <field name="active" widget="boolean_toggle"/>
                     <button name="action_add_to_oferta_wizard" type="object" string="Agregar a Oferta" class="btn-primary" icon="fa-plus"/>
-                </tree>
+                </list>
             </field>
         </record>
         

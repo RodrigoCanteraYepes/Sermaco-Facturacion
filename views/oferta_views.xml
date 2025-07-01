@@ -8,7 +8,7 @@
             <field name="name">oferta.oferta.tree</field>
             <field name="model">oferta.oferta</field>
             <field name="arch" type="xml">
-                <tree string="Ofertas" decoration-info="state=='borrador'" decoration-warning="state=='revision'" decoration-success="state=='aprobada'" decoration-danger="state=='rechazada'">
+                <list string="Ofertas" decoration-info="state=='borrador'" decoration-warning="state=='revision'" decoration-success="state=='aprobada'" decoration-danger="state=='rechazada'">
                     <field name="numero_oferta"/>
                     <field name="name"/>
                     <field name="tipo_oferta"/>
@@ -20,7 +20,7 @@
                     <field name="state" widget="badge" decoration-info="state=='borrador'" decoration-warning="state=='revision'" decoration-success="state=='aprobada'" decoration-danger="state=='rechazada'"/>
                     <field name="user_id"/>
                     <field name="integridad_ok" invisible="1"/>
-                </tree>
+                </list>
             </field>
         </record>
         
@@ -111,7 +111,7 @@
                             <!-- Pestaña de Capítulos -->
                             <page string="Capítulos" name="capitulos" attrs="{'invisible': [('tipo_oferta', '=', 'venta_directa')]}">
                                 <field name="capitulo_ids" context="{'default_oferta_id': active_id}">
-                                    <tree editable="bottom">
+                                    <list editable="bottom">
                                         <field name="sequence" widget="handle"/>
                                         <field name="name"/>
                                         <field name="descripcion"/>
@@ -120,7 +120,7 @@
                                         <field name="subtotal" widget="monetary"/>
                                         <field name="currency_id" invisible="1"/>
                                         <field name="active" widget="boolean_toggle"/>
-                                    </tree>
+                                    </list>
                                 </field>
                                 <div class="alert alert-info" role="alert" attrs="{'invisible': [('tipo_oferta', '!=', 'venta_directa')]}">
                                     <strong>Información:</strong> En ofertas de venta directa no se utilizan capítulos.
@@ -130,7 +130,7 @@
                             <!-- Pestaña de Tarifas -->
                             <page string="Tarifas" name="tarifas">
                                 <field name="tarifa_ids" context="{'default_oferta_id': active_id}">
-                                    <tree editable="bottom">
+                                    <list editable="bottom">
                                         <field name="producto_id"/>
                                         <field name="cantidad"/>
                                         <field name="precio_unitario" widget="monetary"/>
@@ -141,27 +141,27 @@
                                         <field name="fecha_fin"/>
                                         <field name="currency_id" invisible="1"/>
                                         <field name="active" widget="boolean_toggle"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             
                             <!-- Pestaña de Cláusulas -->
                             <page string="Cláusulas" name="clausulas">
                                 <field name="clausula_ids">
-                                    <tree>
+                                    <list>
                                         <field name="codigo"/>
                                         <field name="name"/>
                                         <field name="tipo"/>
                                         <field name="descripcion"/>
                                         <field name="activa" widget="boolean_toggle"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             
                             <!-- Pestaña de Delegaciones -->
                             <page string="Delegaciones" name="delegaciones">
                                 <field name="delegacion_ids" context="{'default_oferta_id': active_id}">
-                                    <tree decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'">
+                                    <list decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'">
                                         <field name="usuario_delegado_id"/>
                                         <field name="tipo_delegacion"/>
                                         <field name="fecha_delegacion"/>
@@ -309,7 +309,7 @@
         <record id="action_oferta_oferta" model="ir.actions.act_window">
             <field name="name">Ofertas</field>
             <field name="res_model">oferta.oferta</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="search_view_id" ref="view_oferta_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

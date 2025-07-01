@@ -7,7 +7,7 @@
             <field name="name">oferta.clausula.tree</field>
             <field name="model">oferta.clausula</field>
             <field name="arch" type="xml">
-                <tree string="Cláusulas" decoration-muted="not activa" decoration-info="tipo=='general'" decoration-warning="tipo=='especifica'">
+                <list string="Cláusulas" editable="bottom" decoration-muted="not activa" decoration-info="tipo=='general'" decoration-warning="tipo=='especifica'">
                     <field name="codigo"/>
                     <field name="name"/>
                     <field name="tipo" widget="badge" decoration-info="tipo=='general'" decoration-warning="tipo=='especifica'"/>
@@ -19,7 +19,7 @@
                     <field name="fecha_fin"/>
                     <field name="activa" widget="boolean_toggle"/>
                     <field name="ofertas_count"/>
-                </tree>
+                </list>
             </field>
         </record>
         

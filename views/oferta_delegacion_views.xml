@@ -7,7 +7,7 @@
             <field name="name">oferta.delegacion.tree</field>
             <field name="model">oferta.delegacion</field>
             <field name="arch" type="xml">
-                <tree string="Delegaciones" decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'" decoration-muted="state=='cancelada'">
+                <list string="Delegaciones" decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'" decoration-muted="state=='cancelada'">
                     <field name="oferta_id"/>
                     <field name="usuario_delegado_id"/>
                     <field name="usuario_delegante_id"/>
@@ -18,7 +18,7 @@
                     <field name="state" widget="badge" decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'"/>
                     <field name="dias_restantes"/>
                     <field name="vencida" invisible="1"/>
-                </tree>
+                </list>
             </field>
         </record>
         

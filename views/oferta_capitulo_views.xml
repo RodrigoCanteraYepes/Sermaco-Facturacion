@@ -7,7 +7,7 @@
             <field name="name">oferta.capitulo.tree</field>
             <field name="model">oferta.capitulo</field>
             <field name="arch" type="xml">
-                <tree string="Capítulos" editable="bottom" decoration-muted="not active">
+                <list string="Capítulos" editable="bottom" decoration-muted="not active">
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="descripcion"/>
@@ -19,7 +19,7 @@
                     <field name="active" widget="boolean_toggle"/>
                     <field name="tiene_productos" invisible="1"/>
                     <field name="productos_sin_precio" invisible="1"/>
-                </tree>
+                </list>
             </field>
         </record>
         
