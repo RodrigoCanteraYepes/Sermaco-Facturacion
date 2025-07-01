@@ -124,17 +124,15 @@ class OfertaTarifa(models.Model):
     )
     
     # Campos de referencia
-    precio_lista = fields.Monetary(
+    precio_lista = fields.Float(
         string='Precio de Lista',
         related='producto_id.list_price',
-        currency_field='currency_id',
         readonly=True
     )
     
-    costo_producto = fields.Monetary(
+    costo_producto = fields.Float(
         string='Costo del Producto',
         related='producto_id.standard_price',
-        currency_field='currency_id',
         readonly=True
     )
     

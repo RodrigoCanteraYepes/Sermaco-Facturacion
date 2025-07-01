@@ -28,6 +28,7 @@
         'sale_management',
         'product',
         'project',
+        'account',
     ],
     'data': [
         'security/security.xml',
