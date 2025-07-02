@@ -33,6 +33,7 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'data/data.xml',
         'data/product_categoria_data.xml',
         'views/oferta_views.xml',
         'views/oferta_capitulo_views.xml',
