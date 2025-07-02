@@ -11,18 +11,18 @@
                 
                 <!-- Agregar botones en el button_box -->
                 <xpath expr="//div[@name='button_box']" position="inside">
-                    <button name="action_view_oferta_origen" type="object" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                    <button name="action_view_oferta_origen" type="object" class="oe_stat_button" icon="fa-file-text-o" invisible="not tiene_oferta_origen">
                         <div class="o_field_widget o_stat_info">
                             <span class="o_stat_text">Ver Oferta</span>
                             <span class="o_stat_value"><field name="numero_oferta"/></span>
                         </div>
                     </button>
-                    <button name="action_view_delegaciones_oferta" type="object" class="oe_stat_button" icon="fa-users" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                    <button name="action_view_delegaciones_oferta" type="object" class="oe_stat_button" icon="fa-users" invisible="not tiene_oferta_origen">
                         <div class="o_field_widget o_stat_info">
                             <span class="o_stat_text">Delegaciones</span>
                         </div>
                     </button>
-                    <button name="action_view_clausulas_oferta" type="object" class="oe_stat_button" icon="fa-list-alt" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                    <button name="action_view_clausulas_oferta" type="object" class="oe_stat_button" icon="fa-list-alt" invisible="not tiene_oferta_origen">
                         <div class="o_field_widget o_stat_info">
                             <span class="o_stat_text">Cláusulas</span>
                         </div>
@@ -31,12 +31,12 @@
                 
                 <!-- Agregar información de oferta origen después del partner -->
                 <xpath expr="//field[@name='partner_id']" position="after">
-                    <field name="oferta_id" readonly="1" attrs="{'invisible': [('oferta_id', '=', False)]}"/>
+                    <field name="oferta_id" readonly="1" invisible="not oferta_id"/>
                 </xpath>
                 
                 <!-- Agregar pestaña de Información de Oferta -->
                 <xpath expr="//notebook" position="inside">
-                    <page string="Información de Oferta" name="oferta_info" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                    <page string="Información de Oferta" name="oferta_info" invisible="not tiene_oferta_origen">
                         <group>
                             <group string="Datos de la Oferta Origen">
                                 <field name="numero_oferta" readonly="1"/>
@@ -88,7 +88,7 @@
                 
                 <!-- Alertas en la parte superior -->
                 <xpath expr="//sheet" position="before">
-                    <div class="alert alert-info" role="alert" attrs="{'invisible': [('tiene_oferta_origen', '=', False)]}">
+                    <div class="alert alert-info" role="alert" invisible="not tiene_oferta_origen">
                         <strong>Información:</strong> Esta orden de venta fue generada desde la oferta <field name="numero_oferta" readonly="1"/>.
                         Los cambios realizados aquí pueden sincronizarse con la oferta original.
                     </div>

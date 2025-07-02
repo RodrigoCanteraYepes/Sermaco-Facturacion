@@ -14,7 +14,7 @@
                     <button name="action_view_ofertas" type="object" class="oe_stat_button" icon="fa-file-text-o">
                         <field name="ofertas_count" widget="statinfo" string="Ofertas"/>
                     </button>
-                    <button name="action_crear_oferta" type="object" class="oe_stat_button" icon="fa-plus" attrs="{'invisible': [('stage_id.is_won', '=', False)]}">
+                    <button name="action_crear_oferta" type="object" class="oe_stat_button" icon="fa-plus" invisible="not stage_id.is_won">
                         <div class="o_field_widget o_stat_info">
                             <span class="o_stat_text">Crear Oferta</span>
                         </div>
@@ -27,7 +27,7 @@
                         <group>
                             <group string="Configuración de Ofertas">
                                 <field name="generar_oferta_automatica" widget="boolean_toggle"/>
-                                <field name="tipo_oferta_preferido" attrs="{'invisible': [('generar_oferta_automatica', '=', False)]}"/>
+                                <field name="tipo_oferta_preferido" invisible="not generar_oferta_automatica"/>
                                 <field name="requerimientos_validados" widget="boolean_toggle"/>
                             </group>
                             <group string="Información de Oferta">
@@ -38,7 +38,7 @@
                             </group>
                         </group>
                         
-                        <group string="Requerimientos" attrs="{'invisible': [('requerimientos_validados', '=', False)]}">
+                        <group string="Requerimientos" invisible="not requerimientos_validados">
                             <field name="requerimientos_detalle" placeholder="Detalle de los requerimientos validados..."/>
                         </group>
                         
@@ -47,8 +47,8 @@
                         </group>
                         
                         <!-- Lista de ofertas relacionadas -->
-                        <group string="Ofertas Relacionadas" attrs="{'invisible': [('ofertas_count', '=', 0)]}">
-                            <field name="oferta_activa_id" readonly="1" attrs="{'invisible': [('oferta_activa_id', '=', False)]}"/>
+                        <group string="Ofertas Relacionadas" invisible="ofertas_count == 0">
+                            <field name="oferta_activa_id" readonly="1" invisible="not oferta_activa_id"/>
                             <field name="ofertas_ids" readonly="1">
                                 <list>
                                     <field name="numero_oferta"/>
@@ -63,10 +63,10 @@
                         </group>
                         
                         <!-- Botones de acción -->
-                        <div class="oe_button_box" attrs="{'invisible': [('stage_id.is_won', '=', False)]}">
-                            <button name="action_validar_requerimientos" type="object" string="Validar Requerimientos" class="btn-primary" attrs="{'invisible': [('requerimientos_validados', '=', True)]}"/>
-                            <button name="action_invalidar_requerimientos" type="object" string="Invalidar Requerimientos" class="btn-warning" attrs="{'invisible': [('requerimientos_validados', '=', False)]}"/>
-                            <button name="action_crear_oferta_manual" type="object" string="Crear Oferta Manual" class="btn-success" attrs="{'invisible': [('requerimientos_validados', '=', False)]}"/>
+                        <div class="oe_button_box" invisible="not stage_id.is_won">
+                            <button name="action_validar_requerimientos" type="object" string="Validar Requerimientos" class="btn-primary" invisible="requerimientos_validados"/>
+                            <button name="action_invalidar_requerimientos" type="object" string="Invalidar Requerimientos" class="btn-warning" invisible="not requerimientos_validados"/>
+                            <button name="action_crear_oferta_manual" type="object" string="Crear Oferta Manual" class="btn-success" invisible="not requerimientos_validados"/>
                         </div>
                     </page>
                 </xpath>

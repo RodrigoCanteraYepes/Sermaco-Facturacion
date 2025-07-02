@@ -163,11 +163,11 @@
                     <field name="categoria_oferta_id" readonly="1"/>
                     <field name="list_price" widget="monetary"/>
                     <field name="es_alquiler" readonly="1" widget="boolean_toggle"/>
-                    <field name="precio_alquiler_diario" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
-                    <field name="precio_alquiler_mensual" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
+                    <field name="precio_alquiler_diario" invisible="not es_alquiler"/>
+                    <field name="precio_alquiler_mensual" invisible="not es_alquiler"/>
                     <field name="es_montaje" readonly="1" widget="boolean_toggle"/>
                     <field name="es_porte" readonly="1" widget="boolean_toggle"/>
-                    <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}"/>
+                    <field name="precio_porte_km" invisible="not es_porte"/>
                     <field name="tags_busqueda"/>
                     <button name="action_add_to_oferta" type="object" string="Agregar a Oferta" class="btn-primary" icon="fa-plus"/>
                 </tree>

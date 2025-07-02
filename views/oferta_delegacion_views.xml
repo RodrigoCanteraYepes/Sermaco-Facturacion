@@ -29,14 +29,14 @@
             <field name="arch" type="xml">
                 <form string="Delegación">
                     <header>
-                        <button name="action_aceptar" type="object" string="Aceptar" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'pendiente'), ('puede_aceptar', '=', False)]}"/>
-                        <button name="action_iniciar_progreso" type="object" string="Iniciar Progreso" class="btn-primary" attrs="{'invisible': ['|', ('state', '!=', 'aceptada'), ('puede_completar', '=', False)]}"/>
-                        <button name="action_completar" type="object" string="Completar" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'en_progreso'), ('puede_completar', '=', False)]}"/>
-                        <button name="action_rechazar" type="object" string="Rechazar" class="btn-danger" attrs="{'invisible': [('state', 'not in', ['pendiente', 'aceptada'])]}"/>
-                        <button name="action_cancelar" type="object" string="Cancelar" attrs="{'invisible': [('state', 'in', ['completada', 'cancelada'])]}"/>
-                        <button name="action_reasignar" type="object" string="Reasignar" class="btn-warning" attrs="{'invisible': [('state', 'in', ['completada', 'cancelada'])]}"/>
-                        <button name="action_extender_plazo" type="object" string="Extender Plazo" class="btn-info" attrs="{'invisible': [('state', 'in', ['completada', 'cancelada'])]}"/>
-                        <field name="state" widget="statusbar" statusbar_visible="pendiente,aceptada,en_progreso,completada"/>
+                        <button name="action_aceptar" type="object" string="Aceptar" class="btn-success" invisible="estado != 'pendiente' or not puede_aceptar"/>
+                        <button name="action_iniciar_progreso" type="object" string="Iniciar Progreso" class="btn-primary" invisible="estado != 'aceptada' or not puede_completar"/>
+                        <button name="action_completar" type="object" string="Completar" class="btn-success" invisible="estado != 'en_progreso' or not puede_completar"/>
+                        <button name="action_rechazar" type="object" string="Rechazar" class="btn-danger" invisible="estado not in ['pendiente', 'aceptada']"/>
+                        <button name="action_cancelar" type="object" string="Cancelar" invisible="estado in ['completada', 'cancelada']"/>
+                        <button name="action_reasignar" type="object" string="Reasignar" class="btn-warning" invisible="estado in ['completada', 'cancelada']"/>
+                        <button name="action_extender_plazo" type="object" string="Extender Plazo" class="btn-info" invisible="estado in ['completada', 'cancelada']"/>
+                        <field name="estado" widget="statusbar" statusbar_visible="pendiente,aceptada,en_progreso,completada"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
@@ -49,11 +49,11 @@
                         </div>
                         
                         <!-- Alertas -->
-                        <div class="alert alert-danger" role="alert" attrs="{'invisible': [('vencida', '=', False)]}">
+                        <div class="alert alert-danger" role="alert" invisible="not esta_vencida">
                             <strong>¡Atención!</strong> Esta delegación está vencida.
                         </div>
                         
-                        <div class="alert alert-warning" role="alert" attrs="{'invisible': [('dias_restantes', '>', 2)]}">
+                        <div class="alert alert-warning" role="alert" invisible="dias_restantes > 2">
                             <strong>¡Urgente!</strong> Esta delegación vence en <field name="dias_restantes"/> días.
                         </div>
                         
@@ -67,8 +67,8 @@
                             <group string="Fechas">
                                 <field name="fecha_delegacion" readonly="1"/>
                                 <field name="fecha_vencimiento"/>
-                                <field name="fecha_aceptacion" readonly="1" attrs="{'invisible': [('fecha_aceptacion', '=', False)]}"/>
-                                <field name="fecha_completado" readonly="1" attrs="{'invisible': [('fecha_completado', '=', False)]}"/>
+                                <field name="fecha_aceptacion" readonly="1" invisible="not fecha_aceptacion"/>
+                                <field name="fecha_completado" readonly="1" invisible="not fecha_completado"/>
                             </group>
                         </group>
                         
@@ -76,7 +76,7 @@
                             <group string="Estado">
                                 <field name="dias_restantes" readonly="1"/>
                                 <field name="vencida" readonly="1" widget="boolean_toggle"/>
-                                <field name="duracion_delegacion" readonly="1" attrs="{'invisible': [('duracion_delegacion', '=', 0)]}"/>
+                                <field name="duracion_delegacion" readonly="1" invisible="duracion_delegacion == 0"/>
                             </group>
                             <group string="Permisos" invisible="1">
                                 <field name="puede_aceptar"/>
@@ -96,7 +96,7 @@
                             <field name="instrucciones_especiales" placeholder="Instrucciones específicas para el delegado..."/>
                         </group>
                         
-                        <group string="Resultado de Delegación" attrs="{'invisible': [('state', 'not in', ['completada', 'rechazada'])]}">
+                        <group string="Resultado de Delegación" invisible="estado not in ['completada', 'rechazada']">
                             <field name="resultado_delegacion" placeholder="Describe el resultado de la delegación..."/>
                         </group>
                     </sheet>
@@ -124,15 +124,15 @@
                     <filter name="mis_delegaciones" string="Mis Delegaciones" domain="[('usuario_delegado_id', '=', uid)]"/>
                     <filter name="delegaciones_creadas" string="Delegaciones Creadas por Mí" domain="[('usuario_delegante_id', '=', uid)]"/>
                     <separator/>
-                    <filter name="pendientes" string="Pendientes" domain="[('state', '=', 'pendiente')]"/>
-                    <filter name="aceptadas" string="Aceptadas" domain="[('state', '=', 'aceptada')]"/>
-                    <filter name="en_progreso" string="En Progreso" domain="[('state', '=', 'en_progreso')]"/>
-                    <filter name="completadas" string="Completadas" domain="[('state', '=', 'completada')]"/>
-                    <filter name="rechazadas" string="Rechazadas" domain="[('state', '=', 'rechazada')]"/>
-                    <filter name="canceladas" string="Canceladas" domain="[('state', '=', 'cancelada')]"/>
+                    <filter name="pendientes" string="Pendientes" domain="[('estado', '=', 'pendiente')]"/>
+                    <filter name="aceptadas" string="Aceptadas" domain="[('estado', '=', 'aceptada')]"/>
+                    <filter name="en_progreso" string="En Progreso" domain="[('estado', '=', 'en_progreso')]"/>
+                    <filter name="completadas" string="Completadas" domain="[('estado', '=', 'completada')]"/>
+                    <filter name="rechazadas" string="Rechazadas" domain="[('estado', '=', 'rechazada')]"/>
+                    <filter name="canceladas" string="Canceladas" domain="[('estado', '=', 'cancelada')]"/>
                     <separator/>
                     <filter name="vencidas" string="Vencidas" domain="[('vencida', '=', True)]"/>
-                    <filter name="por_vencer" string="Por Vencer (2 días)" domain="[('dias_restantes', '&lt;=', 2), ('state', 'not in', ['completada', 'cancelada'])]}"/>
+                    <filter name="por_vencer" string="Por Vencer (2 días)" domain="[('dias_restantes', '&lt;=', 2), ('estado', 'not in', ['completada', 'cancelada'])]}}"/>
                     <separator/>
                     <filter name="alta_prioridad" string="Alta Prioridad" domain="[('prioridad', '=', '3')]"/>
                     <filter name="media_prioridad" string="Media Prioridad" domain="[('prioridad', '=', '2')]"/>
@@ -141,7 +141,7 @@
                     <filter name="esta_semana" string="Esta Semana" domain="[('fecha_vencimiento', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d')), ('fecha_vencimiento', '&lt;=', (context_today() + datetime.timedelta(days=6-context_today().weekday())).strftime('%Y-%m-%d'))]"/>
                     <filter name="este_mes" string="Este Mes" domain="[('fecha_vencimiento', '&gt;=', context_today().replace(day=1).strftime('%Y-%m-%d'))]"/>
                     <group expand="0" string="Agrupar Por">
-                        <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
+                        <filter name="group_state" string="Estado" context="{'group_by': 'estado'}"/>
                         <filter name="group_delegado" string="Delegado" context="{'group_by': 'usuario_delegado_id'}"/>
                         <filter name="group_delegante" string="Delegante" context="{'group_by': 'usuario_delegante_id'}"/>
                         <filter name="group_tipo" string="Tipo" context="{'group_by': 'tipo_delegacion'}"/>
@@ -158,13 +158,13 @@
             <field name="name">oferta.delegacion.kanban</field>
             <field name="model">oferta.delegacion</field>
             <field name="arch" type="xml">
-                <kanban default_group_by="state" class="o_kanban_small_column">
+                <kanban default_group_by="estado" class="o_kanban_small_column">
                     <field name="oferta_id"/>
                     <field name="usuario_delegado_id"/>
                     <field name="tipo_delegacion"/>
                     <field name="fecha_vencimiento"/>
                     <field name="prioridad"/>
-                    <field name="state"/>
+                    <field name="estado"/>
                     <field name="dias_restantes"/>
                     <field name="vencida"/>
                     <field name="puede_aceptar"/>
@@ -216,8 +216,8 @@
                                     </div>
                                     <div class="oe_kanban_bottom_right">
                                         <div class="o_kanban_inline_block">
-                                            <button name="action_aceptar" type="object" class="btn btn-sm btn-success" t-if="record.state.raw_value == 'pendiente' and record.puede_aceptar.raw_value">Aceptar</button>
-                                            <button name="action_completar" type="object" class="btn btn-sm btn-primary" t-if="record.state.raw_value == 'en_progreso' and record.puede_completar.raw_value">Completar</button>
+                                            <button name="action_aceptar" type="object" class="btn btn-sm btn-success" t-if="record.estado.raw_value == 'pendiente' and record.puede_aceptar.raw_value">Aceptar</button>
+                                            <button name="action_completar" type="object" class="btn btn-sm btn-primary" t-if="record.estado.raw_value == 'en_progreso' and record.puede_completar.raw_value">Completar</button>
                                         </div>
                                         <img t-att-src="kanban_image('res.users', 'avatar_128', record.usuario_delegado_id.raw_value)" t-att-title="record.usuario_delegado_id.value" t-att-alt="record.usuario_delegado_id.value" class="oe_kanban_avatar"/>
                                     </div>
@@ -238,7 +238,7 @@
                     <field name="oferta_id"/>
                     <field name="usuario_delegado_id"/>
                     <field name="tipo_delegacion"/>
-                    <field name="state"/>
+                    <field name="estado"/>
                 </calendar>
             </field>
         </record>

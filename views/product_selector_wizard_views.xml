@@ -20,7 +20,7 @@
                                 <field name="search_term" placeholder="Buscar por nombre, código o tags..."/>
                             </group>
                             <group>
-                                <field name="oferta_id" options="{'no_create': True}" attrs="{'required': [('selected_product_ids', '!=', [])]}"/>
+                                <field name="oferta_id" options="{'no_create': True}" required="selected_product_ids"/>
                             </group>
                         </group>
                         
@@ -33,11 +33,11 @@
                                         <field name="categoria_oferta_id"/>
                                         <field name="list_price" widget="monetary"/>
                                         <field name="es_alquiler" widget="boolean_toggle"/>
-                                        <field name="precio_alquiler_diario" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
-                                        <field name="precio_alquiler_mensual" attrs="{'invisible': [('es_alquiler', '=', False)]}"/>
+                                        <field name="precio_alquiler_diario" invisible="not es_alquiler"/>
+                                        <field name="precio_alquiler_mensual" invisible="not es_alquiler"/>
                                         <field name="es_montaje" widget="boolean_toggle"/>
                                         <field name="es_porte" widget="boolean_toggle"/>
-                                        <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}"/>
+                                        <field name="precio_porte_km" invisible="not es_porte"/>
                                         <field name="tags_busqueda"/>
                                     </list>
                                 </field>
@@ -51,19 +51,19 @@
                                         <field name="categoria_oferta_id" readonly="1"/>
                                         <field name="list_price" widget="monetary" readonly="1"/>
                                         <field name="es_alquiler" readonly="1" widget="boolean_toggle"/>
-                                        <field name="precio_alquiler_diario" attrs="{'invisible': [('es_alquiler', '=', False)]}" readonly="1"/>
-                                        <field name="precio_alquiler_mensual" attrs="{'invisible': [('es_alquiler', '=', False)]}" readonly="1"/>
+                                        <field name="precio_alquiler_diario" invisible="not es_alquiler" readonly="1"/>
+                                        <field name="precio_alquiler_mensual" invisible="not es_alquiler" readonly="1"/>
                                         <field name="es_montaje" readonly="1" widget="boolean_toggle"/>
                                         <field name="es_porte" readonly="1" widget="boolean_toggle"/>
-                                        <field name="precio_porte_km" attrs="{'invisible': [('es_porte', '=', False)]}" readonly="1"/>
+                                        <field name="precio_porte_km" invisible="not es_porte" readonly="1"/>
                                     </list>
                                 </field>
                             </page>
                         </notebook>
                     </sheet>
                     <footer>
-                        <button name="action_view_products_by_category" type="object" string="Ver Productos" class="btn-secondary" attrs="{'invisible': [('categoria_id', '=', False)]}"/>
-                        <button name="action_add_products_to_oferta" type="object" string="Agregar a Oferta" class="btn-primary" attrs="{'invisible': ['|', ('selected_product_ids', '=', []), ('oferta_id', '=', False)]}"/>
+                        <button name="action_view_products_by_category" type="object" string="Ver Productos" class="btn-secondary" invisible="not categoria_id"/>
+                        <button name="action_add_products_to_oferta" type="object" string="Agregar a Oferta" class="btn-primary" invisible="not selected_product_ids or not oferta_id"/>
                         <button string="Cancelar" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>
