@@ -31,24 +31,24 @@
             <field name="arch" type="xml">
                 <form string="Oferta">
                     <header>
-                        <button name="action_enviar_revision" type="object" string="Enviar a Revisión" class="btn-primary" attrs="{'invisible': [('state', '!=', 'borrador')]}"/>
-                        <button name="action_aprobar" type="object" string="Aprobar" class="btn-success" attrs="{'invisible': [('state', '!=', 'revision')]}"/>
-                        <button name="action_enviar_cliente" type="object" string="Enviar a Cliente" class="btn-primary" attrs="{'invisible': [('state', '!=', 'aprobada')]}"/>
-                        <button name="action_aceptar" type="object" string="Aceptar" class="btn-success" attrs="{'invisible': [('state', '!=', 'enviada')]}"/>
-                        <button name="action_rechazar" type="object" string="Rechazar" class="btn-danger" attrs="{'invisible': [('state', 'not in', ['revision', 'enviada'])]}"/>
-                        <button name="action_cancelar" type="object" string="Cancelar" attrs="{'invisible': [('state', 'in', ['aceptada', 'cancelada'])]}"/>
-                        <button name="action_reset_borrador" type="object" string="Volver a Borrador" attrs="{'invisible': [('state', 'not in', ['rechazada', 'cancelada'])]}"/>
-                        <button name="action_crear_pedido_venta" type="object" string="Crear Pedido de Venta" class="btn-primary" attrs="{'invisible': [('state', '!=', 'aceptada')]}"/>
+                        <button name="action_enviar_revision" type="object" string="Enviar a Revisión" class="btn-primary" invisible="state != 'borrador'"/>
+                        <button name="action_aprobar" type="object" string="Aprobar" class="btn-success" invisible="state != 'revision'"/>
+                        <button name="action_enviar_cliente" type="object" string="Enviar a Cliente" class="btn-primary" invisible="state != 'aprobada'"/>
+                        <button name="action_aceptar" type="object" string="Aceptar" class="btn-success" invisible="state != 'enviada'"/>
+                        <button name="action_rechazar" type="object" string="Rechazar" class="btn-danger" invisible="state not in ['revision', 'enviada']"/>
+                        <button name="action_cancelar" type="object" string="Cancelar" invisible="state in ['aceptada', 'cancelada']"/>
+                        <button name="action_reset_borrador" type="object" string="Volver a Borrador" invisible="state not in ['rechazada', 'cancelada']"/>
+                        <button name="action_crear_pedido_venta" type="object" string="Crear Pedido de Venta" class="btn-primary" invisible="state != 'aceptada'"/>
                         <field name="state" widget="statusbar" statusbar_visible="borrador,revision,aprobada,enviada,aceptada"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button name="action_view_sale_order" type="object" class="oe_stat_button" icon="fa-shopping-cart" attrs="{'invisible': [('pedido_venta_id', '=', False)]}">
+                            <button name="action_view_sale_order" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="not pedido_venta_id">
                                 <div class="o_field_widget o_stat_info">
                                     <span class="o_stat_text">Pedido de Venta</span>
                                 </div>
                             </button>
-                            <button name="action_view_opportunity" type="object" class="oe_stat_button" icon="fa-star" attrs="{'invisible': [('oportunidad_id', '=', False)]}">
+                            <button name="action_view_opportunity" type="object" class="oe_stat_button" icon="fa-star" invisible="not oportunidad_id">
                                 <div class="o_field_widget o_stat_info">
                                     <span class="o_stat_text">Oportunidad</span>
                                 </div>
@@ -65,13 +65,13 @@
                         </div>
                         
                         <!-- Alertas de Integridad -->
-                        <div class="alert alert-warning" role="alert" attrs="{'invisible': [('integridad_ok', '=', True)]}">
+                        <div class="alert alert-warning" role="alert" invisible="integridad_ok">
                             <strong>¡Atención!</strong> La oferta tiene problemas de integridad:
                             <ul>
-                                <li attrs="{'invisible': [('productos_sin_precio', '=', False)]}">Hay productos sin precio definido</li>
-                                <li attrs="{'invisible': [('capitulos_sin_productos', '=', False)]}">Hay capítulos sin productos</li>
-                                <li attrs="{'invisible': [('clausulas_count', '>', 0)]}">No hay cláusulas asignadas</li>
-                                <li attrs="{'invisible': [('delegacion_requerida', '=', False)]}">Se requiere delegación para este monto</li>
+                                <li invisible="not productos_sin_precio">Hay productos sin precio definido</li>
+                                <li invisible="not capitulos_sin_productos">Hay capítulos sin productos</li>
+                                <li invisible="clausulas_count > 0">No hay cláusulas asignadas</li>
+                                <li invisible="not delegacion_requerida">Se requiere delegación para este monto</li>
                             </ul>
                         </div>
                         
@@ -109,7 +109,7 @@
                         
                         <notebook>
                             <!-- Pestaña de Capítulos -->
-                            <page string="Capítulos" name="capitulos" attrs="{'invisible': [('tipo_oferta', '=', 'venta_directa')]}">
+                            <page string="Capítulos" name="capitulos" invisible="tipo_oferta == 'venta_directa'">
                                 <field name="capitulo_ids" context="{'default_oferta_id': id}">
                                     <list editable="bottom">
                                         <field name="sequence" widget="handle"/>
@@ -122,7 +122,7 @@
                                         <field name="activo" widget="boolean_toggle"/>
                                     </list>
                                 </field>
-                                <div class="alert alert-info" role="alert" attrs="{'invisible': [('tipo_oferta', '!=', 'venta_directa')]}">
+                                <div class="alert alert-info" role="alert" invisible="tipo_oferta != 'venta_directa'">
                                     <strong>Información:</strong> En ofertas de venta directa no se utilizan capítulos.
                                 </div>
                             </page>
