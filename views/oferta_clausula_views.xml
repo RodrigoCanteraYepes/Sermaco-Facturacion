@@ -30,14 +30,14 @@
             <field name="arch" type="xml">
                 <form string="Cláusula">
                     <header>
-                        <button name="action_ver_ofertas_relacionadas" type="object" string="Ver Ofertas Relacionadas" class="btn-info" invisible="ofertas_count == 0"/>
+                        <button name="action_ver_ofertas" type="object" string="Ver Ofertas Relacionadas" class="btn-info" invisible="ofertas_count == 0"/>
                         <button name="action_duplicar_clausula" type="object" string="Duplicar Cláusula" class="btn-secondary"/>
                         <button name="action_activar" type="object" string="Activar" class="btn-success" invisible="activa"/>
                         <button name="action_desactivar" type="object" string="Desactivar" class="btn-warning" invisible="not activa"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button name="action_ver_ofertas_relacionadas" type="object" class="oe_stat_button" icon="fa-file-text">
+                            <button name="action_ver_ofertas" type="object" class="oe_stat_button" icon="fa-file-text">
                                 <field name="ofertas_count" widget="statinfo" string="Ofertas"/>
                             </button>
                         </div>
@@ -52,7 +52,7 @@
                         </div>
                         
                         <!-- Alertas -->
-                        <div class="alert alert-warning" role="alert" invisible="vigente">
+                        <div class="alert alert-warning" role="alert" invisible="es_valida">
                             <strong>¡Atención!</strong> Esta cláusula no está vigente según las fechas configuradas.
                         </div>
                         
@@ -69,7 +69,7 @@
                             <group>
                                 <field name="fecha_inicio"/>
                                 <field name="fecha_fin"/>
-                                <field name="vigente" readonly="1" widget="boolean_toggle"/>
+                                <field name="es_valida" readonly="1" widget="boolean_toggle"/>
                             </group>
                         </group>
                         
@@ -121,11 +121,6 @@
                             </page>
                         </notebook>
                     </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers"/>
-                        <field name="activity_ids" widget="mail_activity"/>
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
                 </form>
             </field>
         </record>
@@ -144,8 +139,8 @@
                     <filter name="activas" string="Activas" domain="[('activa', '=', True)]"/>
                     <filter name="inactivas" string="Inactivas" domain="[('activa', '=', False)]"/>
                     <separator/>
-                    <filter name="vigentes" string="Vigentes" domain="[('vigente', '=', True)]"/>
-                    <filter name="no_vigentes" string="No Vigentes" domain="[('vigente', '=', False)]"/>
+                    <filter name="vigentes" string="Vigentes" domain="[('es_valida', '=', True)]"/>
+                    <filter name="no_vigentes" string="No Vigentes" domain="[('es_valida', '=', False)]"/>
                     <separator/>
                     <filter name="generales" string="Generales" domain="[('tipo', '=', 'general')]"/>
                     <filter name="especificas" string="Específicas" domain="[('tipo', '=', 'especifica')]"/>
@@ -158,7 +153,7 @@
                     <group expand="0" string="Agrupar Por">
                         <filter name="group_tipo" string="Tipo" context="{'group_by': 'tipo'}"/>
                         <filter name="group_activa" string="Estado" context="{'group_by': 'activa'}"/>
-                        <filter name="group_vigente" string="Vigencia" context="{'group_by': 'vigente'}"/>
+                        <filter name="group_vigente" string="Vigencia" context="{'group_by': 'es_valida'}"/>
                     </group>
                 </search>
             </field>
@@ -171,11 +166,11 @@
             <field name="arch" type="xml">
                 <kanban class="o_kanban_small_column">
                     <field name="codigo"/>
-                    <field name="name"/>
+                    <field name="nombre"/>
                     <field name="tipo"/>
                     <field name="descripcion"/>
                     <field name="activa"/>
-                    <field name="vigente"/>
+                    <field name="es_valida"/>
                     <field name="ofertas_count"/>
                     <field name="aplicable_proyectos"/>
                     <field name="aplicable_venta_directa"/>
@@ -203,9 +198,9 @@
                                         <span class="badge badge-pill" t-attf-class="badge-#{record.tipo.raw_value == 'general' ? 'info' : 'warning'}">
                                             <t t-esc="record.tipo.value"/>
                                         </span>
-                                        <span class="badge badge-pill badge-success" t-if="record.activa.raw_value and record.vigente.raw_value">Vigente</span>
+                                        <span class="badge badge-pill badge-success" t-if="record.activa.raw_value and record.es_valida.raw_value">Vigente</span>
                                         <span class="badge badge-pill badge-secondary" t-if="!record.activa.raw_value">Inactiva</span>
-                                        <span class="badge badge-pill badge-warning" t-if="record.activa.raw_value and !record.vigente.raw_value">No Vigente</span>
+                                        <span class="badge badge-pill badge-warning" t-if="record.activa.raw_value and !record.es_valida.raw_value">No Vigente</span>
                                     </div>
                                     <div t-if="record.descripcion.raw_value">
                                         <i class="fa fa-file-text-o" title="Descripción"/> <t t-esc="record.descripcion.value"/>
