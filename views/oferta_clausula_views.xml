@@ -107,17 +107,15 @@
                             
                             <!-- Pestaña de Ofertas Relacionadas -->
                             <page string="Ofertas" name="ofertas" invisible="ofertas_count == 0">
-                                <field name="oferta_ids" readonly="1">
-                                    <tree>
-                                        <field name="numero_oferta"/>
-                                        <field name="name"/>
-                                        <field name="cliente_id"/>
-                                        <field name="tipo_oferta"/>
-                                        <field name="state" widget="badge"/>
-                                        <field name="monto_total" widget="monetary"/>
-                                        <field name="fecha_oferta"/>
-                                    </tree>
-                                </field>
+                                <div class="oe_button_box">
+                                    <button name="action_ver_ofertas" type="object" class="btn btn-primary">
+                                        <i class="fa fa-external-link"/> Ver Ofertas Relacionadas (<field name="ofertas_count"/>)
+                                    </button>
+                                </div>
+                                <p class="text-muted">
+                                    Esta cláusula está siendo utilizada en <field name="ofertas_count"/> oferta(s).
+                                    Haga clic en el botón superior para ver el listado completo.
+                                </p>
                             </page>
                         </notebook>
                     </sheet>

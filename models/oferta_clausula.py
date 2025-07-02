@@ -166,7 +166,8 @@ class OfertaClausula(models.Model):
         'clausula_id',
         'oferta_id',
         string='Ofertas Relacionadas',
-        compute='_compute_oferta_ids'
+        compute='_compute_oferta_ids',
+        store=False
     )
     
     @api.depends('fecha_inicio', 'fecha_fin')
