@@ -104,7 +104,7 @@
                                 <field name="clausula_ids">
                                     <list>
                                         <field name="codigo"/>
-                                        <field name="name"/>
+                                        <field name="nombre"/>
                                         <field name="tipo"/>
                                         <field name="descripcion"/>
                                         <field name="activa" widget="boolean_toggle"/>
