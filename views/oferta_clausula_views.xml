@@ -110,7 +110,7 @@
                                 <field name="oferta_ids" readonly="1">
                                     <tree>
                                         <field name="numero_oferta"/>
-                                        <field name="nombre"/>
+                                        <field name="name"/>
                                         <field name="cliente_id"/>
                                         <field name="tipo_oferta"/>
                                         <field name="state" widget="badge"/>
