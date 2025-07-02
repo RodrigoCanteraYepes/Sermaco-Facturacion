@@ -1,6 +1,6 @@
 {
     'name': 'Gestión de Ofertas - Etapa Ofertando',
-    'version': '18.0.1.0.2.0',
+    'version': '18.0.1.0.1.0',
     'category': 'Sales',
     'summary': 'Módulo para gestión automatizada de ofertas en proceso de ventas',
     'description': """
