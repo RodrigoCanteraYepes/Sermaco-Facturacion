@@ -87,7 +87,7 @@
                             <!-- Pestaña de Productos -->
                             <page string="Productos" name="productos">
                                 <field name="producto_ids">
-                                    <tree>
+                                    <list>
                                         <field name="display_name"/>
                                         <field name="default_code"/>
                                         <field name="categ_id"/>
@@ -95,20 +95,20 @@
                                         <field name="standard_price" widget="monetary"/>
                                         <field name="uom_id"/>
                                         <field name="active" widget="boolean_toggle"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             
                             <!-- Pestaña de Cláusulas -->
                             <page string="Cláusulas" name="clausulas">
                                 <field name="clausula_ids">
-                                    <tree>
+                                    <list>
                                         <field name="codigo"/>
                                         <field name="name"/>
                                         <field name="tipo"/>
                                         <field name="descripcion"/>
                                         <field name="activa" widget="boolean_toggle"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>
