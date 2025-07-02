@@ -156,7 +156,8 @@ class OfertaClausula(models.Model):
     
     es_valida = fields.Boolean(
         string='Es Válida',
-        compute='_compute_es_valida'
+        compute='_compute_es_valida',
+        store=True
     )
     
     # Relación inversa con ofertas
