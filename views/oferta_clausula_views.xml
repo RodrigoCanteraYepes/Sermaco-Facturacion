@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <list string="Cláusulas" editable="bottom" decoration-muted="not activa" decoration-info="tipo=='general'" decoration-warning="tipo=='especifica'">
                     <field name="codigo"/>
-                    <field name="name"/>
+                    <field name="nombre"/>
                     <field name="tipo" widget="badge" decoration-info="tipo=='general'" decoration-warning="tipo=='especifica'"/>
                     <field name="descripcion"/>
                     <field name="sequence"/>
@@ -47,7 +47,7 @@
                                 <field name="codigo" placeholder="Código de la cláusula..."/>
                             </h1>
                             <h2>
-                                <field name="name" placeholder="Nombre de la cláusula..."/>
+                                <field name="nombre" placeholder="Nombre de la cláusula..."/>
                             </h2>
                         </div>
                         
@@ -110,7 +110,7 @@
                                 <field name="oferta_ids" readonly="1">
                                     <tree>
                                         <field name="numero_oferta"/>
-                                        <field name="name"/>
+                                        <field name="nombre"/>
                                         <field name="cliente_id"/>
                                         <field name="tipo_oferta"/>
                                         <field name="state" widget="badge"/>
@@ -137,7 +137,7 @@
             <field name="arch" type="xml">
                 <search string="Buscar Cláusulas">
                     <field name="codigo"/>
-                    <field name="name"/>
+                    <field name="nombre"/>
                     <field name="descripcion"/>
                     <field name="contenido"/>
                     <separator/>
@@ -189,7 +189,7 @@
                                         </strong>
                                         <br/>
                                         <span class="o_kanban_record_subtitle">
-                                            <field name="name"/>
+                                            <field name="nombre"/>
                                         </span>
                                     </div>
                                     <div class="o_kanban_manage_button_section">
