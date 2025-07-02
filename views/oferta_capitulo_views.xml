@@ -33,8 +33,8 @@
                         <button name="action_agregar_productos_categoria" type="object" string="Agregar Productos por Categoría" class="btn-primary"/>
                         <button name="action_generar_clausulas_especificas" type="object" string="Generar Cláusulas Específicas" class="btn-secondary"/>
                         <button name="action_duplicar_capitulo" type="object" string="Duplicar Capítulo" class="btn-secondary"/>
-                        <button name="action_ver_productos" type="object" string="Ver Productos" class="btn-info" attrs="{'invisible': [('productos_count', '=', 0)]}"/>
-                        <button name="action_ver_tarifas" type="object" string="Ver Tarifas" class="btn-info" attrs="{'invisible': [('productos_count', '=', 0)]}"/>
+                        <button name="action_ver_productos" type="object" string="Ver Productos" class="btn-info" invisible="productos_count == 0"/>
+                        <button name="action_ver_tarifas" type="object" string="Ver Tarifas" class="btn-info" invisible="productos_count == 0"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
@@ -53,11 +53,11 @@
                         </div>
                         
                         <!-- Alertas -->
-                        <div class="alert alert-warning" role="alert" attrs="{'invisible': [('productos_sin_precio', '=', False)]}">
+                        <div class="alert alert-warning" role="alert" invisible="not productos_sin_precio">
                             <strong>¡Atención!</strong> Este capítulo tiene productos sin precio definido.
                         </div>
                         
-                        <div class="alert alert-info" role="alert" attrs="{'invisible': [('tiene_productos', '=', True)]}">
+                        <div class="alert alert-info" role="alert" invisible="tiene_productos">
                             <strong>Información:</strong> Este capítulo no tiene productos asignados.
                         </div>
                         
@@ -87,7 +87,7 @@
                             <!-- Pestaña de Productos -->
                             <page string="Productos" name="productos">
                                 <field name="producto_ids">
-                                    <tree editable="bottom">
+                                    <tree>
                                         <field name="name"/>
                                         <field name="default_code"/>
                                         <field name="categ_id"/>
