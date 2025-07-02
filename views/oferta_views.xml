@@ -110,7 +110,7 @@
                         <notebook>
                             <!-- Pestaña de Capítulos -->
                             <page string="Capítulos" name="capitulos" attrs="{'invisible': [('tipo_oferta', '=', 'venta_directa')]}">
-                                <field name="capitulo_ids" context="{'default_oferta_id': active_id}">
+                                <field name="capitulo_ids" context="{'default_oferta_id': id}">
                                     <list editable="bottom">
                                         <field name="sequence" widget="handle"/>
                                         <field name="nombre"/>
