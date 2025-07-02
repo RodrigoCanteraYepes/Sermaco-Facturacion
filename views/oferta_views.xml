@@ -214,7 +214,7 @@
                     <separator/>
                     <filter name="mis_ofertas" string="Mis Ofertas" domain="[('user_id', '=', uid)]"/>
                     <filter name="borrador" string="Borrador" domain="[('state', '=', 'borrador')]"/>
-                    <filter name="revision" string="En Revisión" domain="[('state', '=', 'revision')]"/>
+                    <filter name="revision" string="En Revisión" domain="[('state', '=', 'en_revision')]"/>
                     <filter name="aprobada" string="Aprobadas" domain="[('state', '=', 'aprobada')]"/>
                     <filter name="enviada" string="Enviadas" domain="[('state', '=', 'enviada')]"/>
                     <filter name="aceptada" string="Aceptadas" domain="[('state', '=', 'aceptada')]"/>

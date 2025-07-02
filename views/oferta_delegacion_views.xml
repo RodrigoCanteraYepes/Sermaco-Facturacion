@@ -7,17 +7,17 @@
             <field name="name">oferta.delegacion.tree</field>
             <field name="model">oferta.delegacion</field>
             <field name="arch" type="xml">
-                <list string="Delegaciones" decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'" decoration-muted="state=='cancelada'">
+                <list string="Delegaciones" decoration-warning="estado=='pendiente'" decoration-info="estado=='aceptada'" decoration-success="estado=='completada'" decoration-danger="estado=='rechazada'" decoration-muted="estado=='cancelada'">
                     <field name="oferta_id"/>
                     <field name="usuario_delegado_id"/>
                     <field name="usuario_delegante_id"/>
                     <field name="tipo_delegacion"/>
                     <field name="fecha_delegacion"/>
-                    <field name="fecha_vencimiento"/>
+                    <field name="fecha_limite"/>
                     <field name="prioridad" widget="priority"/>
-                    <field name="state" widget="badge" decoration-warning="state=='pendiente'" decoration-info="state=='aceptada'" decoration-success="state=='completada'" decoration-danger="state=='rechazada'"/>
+                    <field name="estado" widget="badge" decoration-warning="estado=='pendiente'" decoration-info="estado=='aceptada'" decoration-success="estado=='completada'" decoration-danger="estado=='rechazada'"/>
                     <field name="dias_restantes"/>
-                    <field name="vencida" invisible="1"/>
+                    <field name="esta_vencida" invisible="1"/>
                 </list>
             </field>
         </record>
@@ -66,7 +66,7 @@
                             </group>
                             <group string="Fechas">
                                 <field name="fecha_delegacion" readonly="1"/>
-                                <field name="fecha_vencimiento"/>
+                                <field name="fecha_limite"/>
                                 <field name="fecha_aceptacion" readonly="1" invisible="not fecha_aceptacion"/>
                                 <field name="fecha_completado" readonly="1" invisible="not fecha_completado"/>
                             </group>
@@ -75,7 +75,7 @@
                         <group>
                             <group string="Estado">
                                 <field name="dias_restantes" readonly="1"/>
-                                <field name="vencida" readonly="1" widget="boolean_toggle"/>
+                                <field name="esta_vencida" readonly="1" widget="boolean_toggle"/>
                                 <field name="duracion_delegacion" readonly="1" invisible="duracion_delegacion == 0"/>
                             </group>
                             <group string="Permisos" invisible="1">
@@ -131,15 +131,15 @@
                     <filter name="rechazadas" string="Rechazadas" domain="[('estado', '=', 'rechazada')]"/>
                     <filter name="canceladas" string="Canceladas" domain="[('estado', '=', 'cancelada')]"/>
                     <separator/>
-                    <filter name="vencidas" string="Vencidas" domain="[('vencida', '=', True)]"/>
+                    <filter name="vencidas" string="Vencidas" domain="[('esta_vencida', '=', True)]"/>
                     <filter name="por_vencer" string="Por Vencer (2 días)" domain="[('dias_restantes', '&lt;=', 2), ('estado', 'not in', ['completada', 'cancelada'])]}}"/>
                     <separator/>
                     <filter name="alta_prioridad" string="Alta Prioridad" domain="[('prioridad', '=', '3')]"/>
                     <filter name="media_prioridad" string="Media Prioridad" domain="[('prioridad', '=', '2')]"/>
                     <filter name="baja_prioridad" string="Baja Prioridad" domain="[('prioridad', '=', '1')]"/>
                     <separator/>
-                    <filter name="esta_semana" string="Esta Semana" domain="[('fecha_vencimiento', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d')), ('fecha_vencimiento', '&lt;=', (context_today() + datetime.timedelta(days=6-context_today().weekday())).strftime('%Y-%m-%d'))]"/>
-                    <filter name="este_mes" string="Este Mes" domain="[('fecha_vencimiento', '&gt;=', context_today().replace(day=1).strftime('%Y-%m-%d'))]"/>
+                    <filter name="esta_semana" string="Esta Semana" domain="[('fecha_limite', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d')), ('fecha_limite', '&lt;=', (context_today() + datetime.timedelta(days=6-context_today().weekday())).strftime('%Y-%m-%d'))]"/>
+                    <filter name="este_mes" string="Este Mes" domain="[('fecha_limite', '&gt;=', context_today().replace(day=1).strftime('%Y-%m-%d'))]"/>
                     <group expand="0" string="Agrupar Por">
                         <filter name="group_state" string="Estado" context="{'group_by': 'estado'}"/>
                         <filter name="group_delegado" string="Delegado" context="{'group_by': 'usuario_delegado_id'}"/>
@@ -147,7 +147,7 @@
                         <filter name="group_tipo" string="Tipo" context="{'group_by': 'tipo_delegacion'}"/>
                         <filter name="group_area" string="Área" context="{'group_by': 'area_responsable'}"/>
                         <filter name="group_prioridad" string="Prioridad" context="{'group_by': 'prioridad'}"/>
-                        <filter name="group_fecha" string="Fecha Vencimiento" context="{'group_by': 'fecha_vencimiento'}"/>
+                        <filter name="group_fecha" string="Fecha Límite" context="{'group_by': 'fecha_limite'}"/>
                     </group>
                 </search>
             </field>
@@ -162,16 +162,16 @@
                     <field name="oferta_id"/>
                     <field name="usuario_delegado_id"/>
                     <field name="tipo_delegacion"/>
-                    <field name="fecha_vencimiento"/>
+                    <field name="fecha_limite"/>
                     <field name="prioridad"/>
                     <field name="estado"/>
                     <field name="dias_restantes"/>
-                    <field name="vencida"/>
+                    <field name="esta_vencida"/>
                     <field name="puede_aceptar"/>
                     <field name="puede_completar"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_card oe_kanban_global_click" t-attf-class="#{record.vencida.raw_value ? 'oe_kanban_color_2' : ''}">
+                            <div class="oe_kanban_card oe_kanban_global_click" t-attf-class="#{record.esta_vencida.raw_value ? 'oe_kanban_color_2' : ''}">
                                 <div class="o_kanban_record_top">
                                     <div class="o_kanban_record_headings">
                                         <strong class="o_kanban_record_title">
@@ -193,10 +193,10 @@
                                         <span class="badge badge-pill" t-attf-class="badge-#{record.prioridad.raw_value == '3' ? 'danger' : record.prioridad.raw_value == '2' ? 'warning' : 'info'}">
                                             Prioridad <t t-esc="record.prioridad.raw_value"/>
                                         </span>
-                                        <span class="badge badge-pill badge-danger" t-if="record.vencida.raw_value">
+                                        <span class="badge badge-pill badge-danger" t-if="record.esta_vencida.raw_value">
                                             Vencida
                                         </span>
-                                        <span class="badge badge-pill badge-warning" t-if="!record.vencida.raw_value and record.dias_restantes.raw_value &lt;= 2">
+                                        <span class="badge badge-pill badge-warning" t-if="!record.esta_vencida.raw_value and record.dias_restantes.raw_value &lt;= 2">
                                             Urgente
                                         </span>
                                     </div>
