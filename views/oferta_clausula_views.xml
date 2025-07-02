@@ -137,9 +137,8 @@
                     <filter name="activas" string="Activas" domain="[('activa', '=', True)]"/>
                     <filter name="inactivas" string="Inactivas" domain="[('activa', '=', False)]"/>
                     <separator/>
-                    <!-- Filtros temporalmente comentados hasta que se ejecute la migración -->
-                    <!-- <filter name="vigentes" string="Vigentes" domain="[('es_valida', '=', True)]"/> -->
-                    <!-- <filter name="no_vigentes" string="No Vigentes" domain="[('es_valida', '=', False)]"/> -->
+                    <filter name="vigentes" string="Vigentes" domain="[('es_valida', '=', True)]"/>
+                    <filter name="no_vigentes" string="No Vigentes" domain="[('es_valida', '=', False)]"/>
                     <separator/>
                     <filter name="generales" string="Generales" domain="[('tipo', '=', 'general')]"/>
                     <filter name="especificas" string="Específicas" domain="[('tipo', '=', 'especifica')]"/>
@@ -152,7 +151,7 @@
                     <group expand="0" string="Agrupar Por">
                         <filter name="group_tipo" string="Tipo" context="{'group_by': 'tipo'}"/>
                         <filter name="group_activa" string="Estado" context="{'group_by': 'activa'}"/>
-                        <!-- <filter name="group_vigente" string="Vigencia" context="{'group_by': 'es_valida'}"/> -->
+                        <filter name="group_vigente" string="Vigencia" context="{'group_by': 'es_valida'}"/>
                     </group>
                 </search>
             </field>
