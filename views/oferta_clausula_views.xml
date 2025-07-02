@@ -90,12 +90,12 @@
                                 </group>
                                 
                                 <group string="Sectores y Categorías">
-                                    <field name="sectores_aplicables" widget="many2many_tags"/>
-                                    <field name="categorias_producto_aplicables" widget="many2many_tags"/>
+                                    <field name="sector_ids" widget="many2many_tags"/>
+                                    <field name="categoria_producto_ids" widget="many2many_tags"/>
                                 </group>
                                 
                                 <group string="Ubicación">
-                                    <field name="paises_aplicables" widget="many2many_tags"/>
+                                    <field name="pais_ids" widget="many2many_tags"/>
                                 </group>
                                 
                                 <group string="Montos">
