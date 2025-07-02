@@ -89,12 +89,14 @@ class OfertaCapitulo(models.Model):
     
     tiene_productos = fields.Boolean(
         string='Tiene Productos',
-        compute='_compute_tiene_productos'
+        compute='_compute_tiene_productos',
+        store=True
     )
     
     productos_sin_precio = fields.Boolean(
         string='Productos sin Precio',
-        compute='_compute_productos_sin_precio'
+        compute='_compute_productos_sin_precio',
+        store=True
     )
     
     @api.depends('producto_ids')
