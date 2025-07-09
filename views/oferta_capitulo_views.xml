@@ -3,8 +3,8 @@
     <data>
         
         <!-- Vista de Lista de Capítulos -->
-        <record id="view_oferta_capitulo_tree" model="ir.ui.view">
-            <field name="name">oferta.capitulo.tree</field>
+        <record id="view_oferta_capitulo_list" model="ir.ui.view">
+            <field name="name">oferta.capitulo.list</field>
             <field name="model">oferta.capitulo</field>
             <field name="arch" type="xml">
                 <list string="Capítulos" editable="bottom" decoration-muted="not activo">
@@ -202,7 +202,7 @@
         <record id="action_oferta_capitulo" model="ir.actions.act_window">
             <field name="name">Capítulos de Ofertas</field>
             <field name="res_model">oferta.capitulo</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="search_view_id" ref="view_oferta_capitulo_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

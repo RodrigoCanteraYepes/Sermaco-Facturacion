@@ -3,8 +3,8 @@
     <data>
         
         <!-- Vista de Lista de Delegaciones -->
-        <record id="view_oferta_delegacion_tree" model="ir.ui.view">
-            <field name="name">oferta.delegacion.tree</field>
+        <record id="view_oferta_delegacion_list" model="ir.ui.view">
+            <field name="name">oferta.delegacion.list</field>
             <field name="model">oferta.delegacion</field>
             <field name="arch" type="xml">
                 <list string="Delegaciones" decoration-warning="estado=='pendiente'" decoration-info="estado=='aceptada'" decoration-success="estado=='completada'" decoration-danger="estado=='rechazada'" decoration-muted="estado=='cancelada'">
@@ -247,7 +247,7 @@
         <record id="action_oferta_delegacion" model="ir.actions.act_window">
             <field name="name">Delegaciones</field>
             <field name="res_model">oferta.delegacion</field>
-            <field name="view_mode">kanban,tree,form,calendar</field>
+            <field name="view_mode">kanban,list,form,calendar</field>
             <field name="search_view_id" ref="view_oferta_delegacion_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

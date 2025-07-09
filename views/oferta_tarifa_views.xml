@@ -3,8 +3,8 @@
     <data>
         
         <!-- Vista de Lista de Tarifas -->
-        <record id="view_oferta_tarifa_tree" model="ir.ui.view">
-            <field name="name">oferta.tarifa.tree</field>
+        <record id="view_oferta_tarifa_list" model="ir.ui.view">
+            <field name="name">oferta.tarifa.list</field>
             <field name="model">oferta.tarifa</field>
             <field name="arch" type="xml">
                 <list string="Tarifas" editable="bottom" decoration-muted="not active" decoration-warning="not vigente">
@@ -230,7 +230,7 @@
         <record id="action_oferta_tarifa" model="ir.actions.act_window">
             <field name="name">Tarifas</field>
             <field name="res_model">oferta.tarifa</field>
-            <field name="view_mode">kanban,tree,form,pivot,graph</field>
+            <field name="view_mode">kanban,list,form,pivot,graph</field>
             <field name="search_view_id" ref="view_oferta_tarifa_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

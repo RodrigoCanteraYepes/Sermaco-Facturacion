@@ -241,7 +241,7 @@ class OfertaCapitulo(models.Model):
             'type': 'ir.actions.act_window',
             'name': _('Productos del Capítulo: %s') % self.nombre,
             'res_model': 'product.product',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.producto_ids.ids)],
             'context': {
                 'search_default_sale_ok': 1,

@@ -109,7 +109,7 @@ class CrmLead(models.Model):
             'type': 'ir.actions.act_window',
             'name': _('Ofertas de %s') % self.name,
             'res_model': 'oferta.oferta',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('lead_id', '=', self.id)],
             'context': {
                 'default_lead_id': self.id,

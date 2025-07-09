@@ -3,8 +3,8 @@
     <data>
         
         <!-- Vista de Lista de Cláusulas -->
-        <record id="view_oferta_clausula_tree" model="ir.ui.view">
-            <field name="name">oferta.clausula.tree</field>
+        <record id="view_oferta_clausula_list" model="ir.ui.view">
+            <field name="name">oferta.clausula.list</field>
             <field name="model">oferta.clausula</field>
             <field name="arch" type="xml">
                 <list string="Cláusulas" editable="bottom" decoration-muted="not activa" decoration-info="tipo=='general'" decoration-warning="tipo=='especifica'">
@@ -222,7 +222,7 @@
         <record id="action_oferta_clausula" model="ir.actions.act_window">
             <field name="name">Cláusulas</field>
             <field name="res_model">oferta.clausula</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="search_view_id" ref="view_oferta_clausula_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

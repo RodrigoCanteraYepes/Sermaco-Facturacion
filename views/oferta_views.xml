@@ -4,8 +4,8 @@
     <data>
         
         <!-- Vista de Lista de Ofertas -->
-        <record id="view_oferta_tree" model="ir.ui.view">
-            <field name="name">oferta.oferta.tree</field>
+        <record id="view_oferta_list" model="ir.ui.view">
+            <field name="name">oferta.oferta.list</field>
             <field name="model">oferta.oferta</field>
             <field name="arch" type="xml">
                 <list string="Ofertas" decoration-info="state=='borrador'" decoration-warning="state=='revision'" decoration-success="state=='aprobada'" decoration-danger="state=='rechazada'">

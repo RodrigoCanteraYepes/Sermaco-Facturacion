@@ -88,7 +88,7 @@ class SaleOrder(models.Model):
             'type': 'ir.actions.act_window',
             'name': _('Delegaciones de la Oferta'),
             'res_model': 'oferta.delegacion',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('oferta_id', '=', self.oferta_id.id)],
         }
     

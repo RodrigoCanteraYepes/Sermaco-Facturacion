@@ -32,7 +32,7 @@
         <record id="action_mis_ofertas" model="ir.actions.act_window">
             <field name="name">Mis Ofertas</field>
             <field name="res_model">oferta.oferta</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="domain">[('tecnico_comercial_id', '=', uid)]</field>
             <field name="context">{'default_tecnico_comercial_id': uid}</field>
         </record>
@@ -59,7 +59,7 @@
         <record id="action_capitulos" model="ir.actions.act_window">
             <field name="name">Capítulos</field>
             <field name="res_model">oferta.capitulo</field>
-            <field name="view_mode">tree,form,kanban</field>
+            <field name="view_mode">list,form,kanban</field>
             <field name="context">{}</field>
         </record>
         
@@ -106,7 +106,7 @@
         <record id="action_mis_delegaciones" model="ir.actions.act_window">
             <field name="name">Mis Delegaciones</field>
             <field name="res_model">oferta.delegacion</field>
-            <field name="view_mode">kanban,tree,form,calendar</field>
+            <field name="view_mode">kanban,list,form,calendar</field>
             <field name="domain">[('usuario_delegado_id', '=', uid)]</field>
             <field name="context">{'default_usuario_delegado_id': uid}</field>
         </record>
@@ -118,7 +118,7 @@
         <record id="action_delegaciones_pendientes" model="ir.actions.act_window">
             <field name="name">Delegaciones Pendientes</field>
             <field name="res_model">oferta.delegacion</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="domain">[('usuario_delegado_id', '=', uid), ('estado', 'in', ['pendiente', 'aceptada', 'en_progreso'])]</field>
             <field name="context">{'default_usuario_delegado_id': uid}</field>
         </record>
@@ -169,7 +169,7 @@
         <record id="action_ofertas_crm" model="ir.actions.act_window">
             <field name="name">Ofertas CRM</field>
             <field name="res_model">oferta.oferta</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="domain">[('oportunidad_id', '!=', False)]</field>
             <field name="context">{}</field>
         </record>

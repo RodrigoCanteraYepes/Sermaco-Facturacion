@@ -98,8 +98,8 @@
         </record>
         
         <!-- Extensión de la vista de lista de Sale Order -->
-        <record id="view_sale_order_tree_inherit" model="ir.ui.view">
-            <field name="name">sale.order.tree.inherit.ofertas</field>
+        <record id="view_sale_order_list_inherit" model="ir.ui.view">
+            <field name="name">sale.order.list.inherit.ofertas</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_quotation_tree"/>
             <field name="arch" type="xml">
@@ -164,7 +164,7 @@
         <record id="action_view_delegaciones_oferta" model="ir.actions.act_window">
             <field name="name">Delegaciones de la Oferta</field>
             <field name="res_model">oferta.delegacion</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="target">current</field>
         </record>
         
