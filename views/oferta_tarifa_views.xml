@@ -7,7 +7,7 @@
             <field name="name">oferta.tarifa.list</field>
             <field name="model">oferta.tarifa</field>
             <field name="arch" type="xml">
-                <list string="Tarifas" editable="bottom" decoration-muted="not active" decoration-warning="not vigente">
+                <list string="Tarifas" editable="bottom" decoration-muted="not activa" decoration-warning="not vigente">
                     <field name="producto_id"/>
                     <field name="cantidad"/>
                     <field name="precio" widget="monetary"/>
