@@ -167,6 +167,12 @@ class OfertaTarifa(models.Model):
         compute='_compute_dias_vigencia'
     )
     
+    vigente = fields.Boolean(
+        string='Vigente',
+        compute='_compute_vigente',
+        store=True
+    )
+    
     @api.depends('producto_id')
     def _compute_display_name(self):
         for record in self:
@@ -226,6 +232,17 @@ class OfertaTarifa(models.Model):
                 record.dias_vigencia = delta.days + 1
             else:
                 record.dias_vigencia = 0
+    
+    @api.depends('fecha_inicio', 'fecha_fin', 'activa')
+    def _compute_vigente(self):
+        hoy = fields.Date.today()
+        for record in self:
+            record.vigente = (
+                record.activa and 
+                record.fecha_inicio and 
+                record.fecha_fin and 
+                record.fecha_inicio <= hoy <= record.fecha_fin
+            )
     
     @api.constrains('fecha_inicio', 'fecha_fin')
     def _check_fechas(self):
