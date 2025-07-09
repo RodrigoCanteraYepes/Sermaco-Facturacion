@@ -141,6 +141,9 @@ class Oferta(models.Model):
     
     clausula_ids = fields.Many2many(
         'oferta.clausula',
+        'oferta_oferta_clausula_rel',
+        'oferta_id',
+        'clausula_id',
         string='Cláusulas'
     )
     

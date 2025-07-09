@@ -151,7 +151,8 @@ class OfertaClausula(models.Model):
     # Campos computados
     ofertas_count = fields.Integer(
         string='Número de Ofertas',
-        compute='_compute_ofertas_count'
+        compute='_compute_ofertas_count',
+        store=True
     )
     
     es_valida = fields.Boolean(
